@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Archivio Minecraft - Home</title>
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-25px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-image: url('foto/Screenshot 2026-08-28 215300.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            color: #ffffff;
+            text-align: center;
+            padding: 40px 20px;
+            margin: 0;
+            animation: fadeIn 1s ease-out;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        /* Stile Tema Chiaro (Giorno) */
+        body.light-mode {
+            background-image: none;
+            background-color: #f0f2f5;
+            color: #333333;
+        }
+        body.light-mode .card, body.light-mode .section-box {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            color: #333;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+        body.light-mode .card h2, body.light-mode .section-box h3 {
+            color: #2e7d32;
+        }
+        body.light-mode .card p, body.light-mode .section-box p {
+            color: #555555;
+        }
+        body.light-mode h1 {
+            color: #2e7d32;
+            text-shadow: none;
+        }
+        body.light-mode p.subtitle {
+            color: #666;
+            text-shadow: none;
+        }
+        body.light-mode .theme-selector-container, body.light-mode .user-status-container {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            color: #333;
+        }
+        body.light-mode .user-status-container a {
+            color: #2e7d32;
+        }
+        body.light-mode input {
+            background: #fff;
+            color: #333;
+            border: 1px solid #ccc;
+        }
+        body.light-mode .modal-content {
+            background: #ffffff;
+            color: #333;
+            border: 1px solid rgba(0, 0, 0, 0.2);
+        }
+        body.light-mode .search-suggestions {
+            background: #ffffff;
+            border: 1px solid #ccc;
+        }
+        body.light-mode .search-suggestion-item {
+            color: #333;
+            border-bottom: 1px solid #eee;
+        }
+        body.light-mode .search-suggestion-item:hover {
+            background: #e2e8f0;
+        }
+
+        .theme-selector-container {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(30, 30, 30, 0.85);
+            padding: 8px 12px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(5px);
+            z-index: 100;
+        }
+        .theme-selector-container label {
+            font-size: 0.9rem;
+            margin-right: 8px;
+            color: #ffeb3b;
+            font-weight: bold;
+        }
+        #theme-select {
+            background-color: #2d2d2d;
+            color: #ffffff;
+            border: 1px solid #555;
+            padding: 6px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        /* Box Stato Utente in Alto a Sinistra */
+        .user-status-container {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(30, 30, 30, 0.85);
+            padding: 8px 14px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(5px);
+            z-index: 100;
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: #ffeb3b;
+        }
+        .user-status-container a {
+            color: #4CAF50;
+            text-decoration: underline;
+            cursor: pointer;
+            margin-left: 5px;
+        }
+
+        h1 {
+            color: #4CAF50;
+            font-size: 2.5rem;
+            margin-top: 50px;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.8);
+        }
+        p.subtitle {
+            font-size: 1.1rem;
+            color: #e0e0e0;
+            margin-bottom: 25px;
+            text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.8);
+        }
+
+        /* Stile Search Bar e Consigliati */
+        .search-container {
+            position: relative;
+            max-width: 450px;
+            margin: 0 auto 35px auto;
+        }
+        #searchInput {
+            width: 100%;
+            padding: 12px 18px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: rgba(30, 30, 30, 0.85);
+            backdrop-filter: blur(5px);
+            color: #fff;
+            font-size: 1rem;
+            box-sizing: border-box;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        #searchInput:focus {
+            border-color: #4CAF50;
+        }
+        .search-suggestions {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: rgba(25, 25, 25, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 0 0 10px 10px;
+            z-index: 99;
+            max-height: 200px;
+            overflow-y: auto;
+            display: none;
+            text-align: left;
+            backdrop-filter: blur(8px);
+        }
+        .search-suggestion-item {
+            padding: 10px 15px;
+            cursor: pointer;
+            color: #e0e0e0;
+            font-size: 0.95rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            text-decoration: none;
+            display: block;
+        }
+        .search-suggestion-item:hover {
+            background: rgba(76, 175, 80, 0.2);
+            color: #ffeb3b;
+        }
+
+        /* GRIGLIA A 3 COLONNE PER LE CARD */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            max-width: 1100px;
+            margin: 0 auto 35px auto;
+            padding: 0 20px;
+        }
+
+        .card, .section-box {
+            background: rgba(30, 30, 30, 0.85);
+            backdrop-filter: blur(8px);
+            margin: 0;
+            padding: 30px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .card:hover, .section-box:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 14px 35px rgba(0, 0, 0, 0.7);
+        }
+        .card h2, .section-box h3 {
+            color: #ffeb3b;
+            margin-top: 0;
+            font-size: 1.5rem;
+        }
+        .card p, .section-box p {
+            color: #cccccc;
+            font-size: 0.95rem;
+            margin-bottom: 25px;
+            flex-grow: 1;
+        }
+
+        /* Box a larghezza piena per sezioni speciali */
+        .full-width-box {
+            max-width: 1100px;
+            margin: 25px auto;
+            text-align: left;
+            box-sizing: border-box;
+            padding: 30px;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 15px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            margin: 5px 0 0 0;
+            text-align: center;
+        }
+        .btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(76, 175, 80, 0.6);
+        }
+        .btn-secondary {
+            background: linear-gradient(135deg, #555, #444);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+        }
+        #versionePreferita, #inputUsername, #inputPassword {
+            padding: 10px;
+            width: 80%;
+            border-radius: 6px;
+            border: 1px solid #555;
+            background: #222;
+            color: #fff;
+            font-size: 1rem;
+            margin-bottom: 10px;
+        }
+        .banner-pubblicitario {
+            background: rgba(20, 20, 20, 0.95);
+            border: 2px dashed #ff9800;
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 15px;
+            border-radius: 12px;
+            color: #ffcc80;
+            font-size: 0.9rem;
+        }
+        #modal-Benvenuto, #modal-Premium {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(5px);
+            z-index: 9999;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.4s ease;
+        }
+        .modal-content {
+            background: #1e1e1e;
+            padding: 35px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            max-width: 420px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+        }
+        #sezioneAnteprimePremium {
+            display: none;
+            background: linear-gradient(135deg, rgba(255, 152, 0, 0.15), rgba(30, 30, 30, 0.9));
+            border: 2px solid #ff9800;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Stato Utente in Alto a Sinistra -->
+    <div class="user-status-container" id="userStatusBox"></div>
+
+    <!-- Modale Accesso / Registrazione -->
+    <div id="modal-Benvenuto">
+        <div class="modal-content">
+            <div id="boxFormAccesso">
+                <h3 id="titoloModal" style="color: #4CAF50; font-size: 1.8rem; margin-top:0;">Benvenuto</h3>
+                <p id="sottotitoloModal" style="color: #ccc; margin-bottom: 15px;">Scegli come accedere all'archivio:</p>
+                
+                <input type="text" id="inputUsername" placeholder="Username...">
+                <input type="password" id="inputPassword" placeholder="Password...">
+                <br><br>
+                
+                <div id="containerBottoniAuth">
+                    <button id="btnAzioneLogin" class="btn">Accedi</button>
+                    <button id="btnAzioneRegistra" class="btn" style="background: linear-gradient(135deg, #2196F3, #1976D2);">Registrati</button>
+                </div>
+                
+                <div style="margin-top: 15px;">
+                    <button id="btnOspite" class="btn btn-secondary" style="width: 100%;">Continua senza account (Ospite)</button>
+                </div>
+
+                <p id="erroreUser" style="color: #ff5252; font-size: 0.9rem; margin-top: 10px;"></p>
+            </div>
+            <div id="boxSalutoNero" style="display: none;">
+                <h1 id="testoSchermoNero" style="font-size: 2rem; margin:0;">Caricamento...</h1>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modale Premium -->
+    <div id="modal-Premium" style="display: none;">
+        <div class="modal-content" style="border-color: #555;">
+            <h2 style="color: #888; margin-top: 0;">💎 Sistema VIP in Manutenzione</h2>
+            <p style="color: #bbb;">Gli acquisti e le attivazioni tramite PayPal sono temporaneamente disabilitati.</p>
+            <p style="font-size: 0.9rem; color: #888; margin-bottom: 25px;">Torneremo presto con nuove funzioni!</p>
+            <button class="btn" disabled style="width: 100%; background: #555; color: #aaa; cursor: not-allowed; box-shadow: none;">Pagamento non disponibile</button>
+            <br><br>
+            <button id="chiudiModalPremium" style="background: transparent; border: none; color: #aaa; cursor: pointer; text-decoration: underline;">Chiudi</button>
+        </div>
+    </div>
+
+    <div class="theme-selector-container">
+        <label for="theme-select">Tema:</label>
+        <select id="theme-select">
+            <option value="dark">🌙 Notte (Scuro)</option>
+            <option value="light">☀️ Giorno (Chiaro)</option>
+        </select>
+    </div>
+
+    <div class="banner-pubblicitario" id="bannerAd">
+        📢 <b>Pubblicità:</b> Vuoi rimuovere banner come questo? <a href="#" id="apriPremiumLink" style="color: #ffeb3b; font-weight: bold;">Scopri il VIP (In arrivo)</a>
+    </div>
+
+    <h1>SCOPRI TUTTE LE VERSIONI DI MINECRAFT</h1>
+    <p class="subtitle">Esplora le ultime novità e la storia completa delle versioni di Minecraft!</p>
+
+    <!-- Barra di Ricerca con Consigliati -->
+    <div class="search-container">
+        <input type="text" id="searchInput" placeholder="Cerca una sezione o versione (es. Anno 2026, Alpha)...">
+        <div id="searchSuggestions" class="search-suggestions"></div>
+    </div>
+
+    <div class="section-box full-width-box" id="sezioneAnteprimePremium">
+        <h3 style="color: #ff9800; margin-top: 0;">🔥 Area Anteprime VIP (Esclusivo)</h3>
+        <p>Qui puoi vedere in anteprima assoluta le build sperimentali!</p>
+        <a href="#" class="btn btn-premium">ACCEDI ALLE ANTEPRIME</a>
+    </div>
+
+    <!-- GRIGLIA A 3 COLONNE PER LE CARD -->
+    <div class="cards-grid">
+        <div class="card searchable-card" data-keywords="anno 2026 nuove versioni recenti">
+            <h2>ANNO 2026</h2>
+            <p>Guarda le versioni e gli aggiornamenti più recenti di quest'anno.</p>
+            <a href="versioni annuali/nuove versioni.html" class="btn">NUOVE VERSIONI</a>
+        </div>
+        
+        <div class="card searchable-card" data-keywords="tutte le versioni archivio completo">
+            <h2>TUTTE LE VERSIONI</h2>
+            <p>Un archivio completo di ogni singola versione pubblicata.</p>
+            <a href="versioni/tutte le versioni.html" class="btn">TUTTE LE VERSIONI</a>
+        </div>
+
+        <div class="card searchable-card" data-keywords="era alpha passato origini primissime build">
+            <h2>ERA ALPHA</h2>
+            <p>Tuffati nel passato e scopri le origini e le primissime build.</p>
+            <a href="versioni alpha.html" class="btn">VERSIONI ALPHA</a>
+        </div>
+
+        <!-- CARD PER FEEDBACK E BUG REPORT -->
+        <div class="card searchable-card" data-keywords="consigli bug report segnalazioni supporto">
+            <h2>FEEDBACK & BUG</h2>
+            <p>Hai trovato un errore o vuoi suggerire nuove funzioni? Scrivici!</p>
+            <a href="feedback.html" class="btn" style="background: linear-gradient(135deg, #2196F3, #1976D2);">INVIA UN FEEDBACK</a>
+        </div>
+
+        <!-- CARD 1.21.11 ALLINEATA ALLA GRIGLIA -->
+        <div class="card searchable-card" data-keywords="1.21.11 subversioni">
+            <h2>
+                <span style="color: rgb(65, 64, 64);">1.21.</span><span style="color: black;">11</span>.
+            </h2>
+            <h3>Stanno arrivando le subversioni!</h3>
+            <button class="btn" disabled style="background: #555555 !important; color: #aaaaaa !important; cursor: not-allowed; box-shadow: none; transform: none;">in arrivo...</button>
+        </div>
+    </div>
+
+    <div class="section-box full-width-box">
+        <h3 style="margin-top: 0;">Qual è la tua versione preferita?</h3>
+        <p>Scrivila qui sotto per inviare la tua preferenza all'archivio!</p>
+        <input type="text" id="versionePreferita" placeholder="Es. 1.21.11 o 26.1">
+        <br><br>
+        <button id="inviaBtn" class="btn">Invia Preferenza</button>
+        <p id="messaggioStato" style="margin-top: 10px; font-size: 0.9rem;"></p>
+    </div>
+
+    <!-- Script con elementi extra inseriti direttamente nella ricerca -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+        import { getFirestore, collection, addDoc, setDoc, getDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyC2a2DiYisJg7-a70zd5Lv-f8C9-ZKZl00",
+            authDomain: "minecraft-preferenze-versioni.firebaseapp.com",
+            projectId: "minecraft-preferenze-versioni",
+            storageBucket: "minecraft-preferenze-versioni.firebasestorage.app",
+            messagingSenderId: "415706777166",
+            appId: "1:415706777166:web:8c4a2094c9b923d042e51f",
+            measurementId: "G-YCE8E74V6B"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // --- GESTIONE TEMA GIORNO / NOTTE ---
+        const themeSelect = document.getElementById('theme-select');
+        const body = document.body;
+
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'light') {
+            body.classList.add('light-mode');
+            themeSelect.value = 'light';
+        } else {
+            themeSelect.value = 'dark';
+            body.classList.remove('light-mode');
+        }
+
+        themeSelect.addEventListener('change', function() {
+            if (this.value === 'light') {
+                body.classList.add('light-mode');
+                localStorage.setItem('theme', 'light');
+            } else {
+                body.classList.remove('light-mode');
+                localStorage.setItem('theme', 'dark');
+            }
+        });
+
+        // --- GESTIONE SEARCH BAR & SUGGERIMENTI ---
+        const searchInput = document.getElementById('searchInput');
+        const searchSuggestions = document.getElementById('searchSuggestions');
+        const searchableCards = document.querySelectorAll('.searchable-card');
+
+        const itemsDaCercare = Array.from(searchableCards).map(card => {
+            return {
+                titolo: card.querySelector('h2').innerText,
+                keywords: card.getAttribute('data-keywords') || "",
+                link: card.querySelector('.btn') ? card.querySelector('.btn').getAttribute('href') : "#"
+            };
+        });
+
+        const elementiExtra = [
+            { titolo: "1.21", keywords: "scopri la 1.21", link: "versioni/1.21.html" },
+            { titolo: "Tricky Trials", keywords: "tricky trials 1.21 scopri la 1.21", link: "versioni/1.21.html" }
+        ];
+
+        const tuttiGliItem = [...itemsDaCercare, ...elementiExtra];
+
+        searchInput.addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase().trim();
+            searchSuggestions.innerHTML = '';
+
+            if (query === '') {
+                searchSuggestions.style.display = 'none';
+                searchableCards.forEach(card => card.style.display = 'flex');
+                return;
+            }
+
+            searchableCards.forEach(card => {
+                const titolo = card.querySelector('h2').innerText.toLowerCase();
+                const desc = card.querySelector('p').innerText.toLowerCase();
+                const keywords = card.getAttribute('data-keywords').toLowerCase();
+
+                if (titolo.includes(query) || desc.includes(query) || keywords.includes(query)) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            const consigliati = tuttiGliItem.filter(item => 
+                item.titolo.toLowerCase().includes(query) || 
+                item.keywords.toLowerCase().includes(query)
+            );
+
+            if (consigliati.length > 0) {
+                searchSuggestions.style.display = 'block';
+                consigliati.forEach(item => {
+                    const div = document.createElement('a');
+                    div.className = 'search-suggestion-item';
+                    div.innerHTML = `<b>${item.titolo}</b> - <span style="font-size:0.85rem; color:#aaa;">Vai direttamente</span>`;
+                    div.href = item.link;
+                    searchSuggestions.appendChild(div);
+                });
+            } else {
+                searchSuggestions.style.display = 'none';
+            }
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!searchInput.contains(e.target) && !searchSuggestions.contains(e.target)) {
+                searchSuggestions.style.display = 'none';
+            }
+        });
+
+        // --- GESTIONE SESSIONE (10 GIORNI) & MODALE ---
+        const modalBenvenuto = document.getElementById('modal-Benvenuto');
+        const boxFormAccesso = document.getElementById('boxFormAccesso');
+        const boxSalutoNero = document.getElementById('boxSalutoNero');
+        const testoSchermoNero = document.getElementById('testoSchermoNero');
+        const userStatusBox = document.getElementById('userStatusBox');
+
+        const DIECI_GIORNI_MS = 10 * 24 * 60 * 60 * 1000;
+        const savedUser = localStorage.getItem('minecraft_username');
+        const savedTimestamp = localStorage.getItem('minecraft_login_time');
+        const isGuest = localStorage.getItem('minecraft_guest') === 'true';
+        const now = new Date().getTime();
+
+        let bisognaMostrareModale = false;
+
+        if (!savedUser && !isGuest) {
+            bisognaMostrareModale = true;
+        } else if (savedTimestamp && (now - parseInt(savedTimestamp) > DIECI_GIORNI_MS)) {
+            localStorage.removeItem('minecraft_username');
+            localStorage.removeItem('minecraft_login_time');
+            localStorage.removeItem('minecraft_guest');
+            bisognaMostrareModale = true;
+        }
+
+        function aggiornaBarraStato() {
+            const currentU = localStorage.getItem('minecraft_username');
+            const guestActive = localStorage.getItem('minecraft_guest') === 'true';
+
+            if (currentU) {
+                userStatusBox.innerHTML = `👤 ${currentU.toUpperCase()} <a id="logoutLink" style="font-size:0.8rem; color:#aaa; margin-left:8px; cursor:pointer;">Esci</a>`;
+                document.getElementById('logoutLink').addEventListener('click', () => {
+                    localStorage.removeItem('minecraft_username');
+                    localStorage.removeItem('minecraft_login_time');
+                    location.reload();
+                });
+            } else if (guestActive) {
+                userStatusBox.innerHTML = `🛡️ Modalità Ospite <a id="apriRegistrazioneDaBarra">Registrati</a>`;
+                document.getElementById('apriRegistrazioneDaBarra').addEventListener('click', () => {
+                    apriModale();
+                });
+            }
+        }
+
+        function apriModale() {
+            boxFormAccesso.style.display = 'block';
+            boxSalutoNero.style.display = 'none';
+            modalBenvenuto.style.opacity = '1';
+            modalBenvenuto.style.display = 'flex';
+        }
+
+        if (bisognaMostrareModale) {
+            apriModale();
+        } else {
+            aggiornaBarraStato();
+            if (savedUser) {
+                verificaStatoUtente(savedUser);
+            }
+        }
+
+        async function verificaStatoUtente(username) {
+            if (!username) return;
+            const userKey = username.toLowerCase();
+
+            try {
+                const banRef = doc(db, "banned", userKey);
+                const banSnap = await getDoc(banRef);
+                if (banSnap.exists()) {
+                    const infoBan = banSnap.data();
+                    if (infoBan.tipo === "permanente") {
+                        document.body.innerHTML = `<div style="background:#121212; color:#ff5252; height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center; font-family:sans-serif;"><h1>SEI STATO BANNATO</h1><p>Non puoi accedere a questo archivio a causa di contenuti non idonei.</p></div>`;
+                        return;
+                    } else if (infoBan.tipo === "1giorno" && infoBan.scadenza) {
+                        if (new Date().getTime() < infoBan.scadenza) {
+                            document.body.innerHTML = `<div style="background:#121212; color:#ff9800; height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center; font-family:sans-serif;"><h1>SEI SOTTO TEMP-BAN</h1><p>Il tuo ban temporaneo scadrà presto.</p></div>`;
+                            return;
+                        }
+                    }
+                }
+
+                const premiumRef = doc(db, "premium", userKey);
+                const premiumSnap = await getDoc(premiumRef);
+                if (premiumSnap.exists() && premiumSnap.data().attivo) {
+                    const banner = document.getElementById('bannerAd');
+                    if(banner) banner.style.display = 'none';
+                    const sezioneAnteprima = document.getElementById('sezioneAnteprimePremium');
+                    if(sezioneAnteprima) sezioneAnteprima.style.display = 'block';
+                }
+            } catch(e) {
+                console.error("Errore verifica utente:", e);
+            }
+        }
+
+        const errP = document.getElementById('erroreUser');
+
+        document.getElementById('btnAzioneLogin').addEventListener('click', async () => {
+            const u = document.getElementById('inputUsername').value.trim();
+            const p = document.getElementById('inputPassword').value.trim();
+
+            if (!u || !p) {
+                errP.innerText = "Inserisci username e password!";
+                return;
+            }
+
+            const userKey = u.toLowerCase();
+            try {
+                const userRef = doc(db, "utenti_registrati", userKey);
+                const userSnap = await getDoc(userRef);
+
+                if (!userSnap.exists()) {
+                    errP.innerText = "Questo account non esiste. Registrati prima!";
+                    return;
+                }
+
+                if (userSnap.data().password !== p) {
+                    errP.innerText = "Password errata!";
+                    return;
+                }
+
+                completaAccesso(u);
+            } catch (e) {
+                errP.innerText = "Errore di connessione.";
+            }
+        });
+
+        document.getElementById('btnAzioneRegistra').addEventListener('click', async () => {
+            const u = document.getElementById('inputUsername').value.trim();
+            const p = document.getElementById('inputPassword').value.trim();
+
+            if (!u || !p) {
+                errP.innerText = "Inserisci username e password per registrarti!";
+                return;
+            }
+
+            const userKey = u.toLowerCase();
+            try {
+                const userRef = doc(db, "utenti_registrati", userKey);
+                const userSnap = await getDoc(userRef);
+
+                if (userSnap.exists()) {
+                    errP.innerText = "Username già esistente! Fai il login.";
+                    return;
+                }
+
+                await setDoc(userRef, {
+                    username: u,
+                    password: p,
+                    dataCreazione: new Date().toLocaleString()
+                });
+
+                completaAccesso(u);
+            } catch (e) {
+                errP.innerText = "Errore durante la registrazione.";
+            }
+        });
+
+        document.getElementById('btnOspite').addEventListener('click', () => {
+            localStorage.setItem('minecraft_guest', 'true');
+            localStorage.setItem('minecraft_login_time', new Date().getTime().toString());
+            localStorage.removeItem('minecraft_username');
+
+            boxFormAccesso.style.display = 'none';
+            boxSalutoNero.style.display = 'block';
+            testoSchermoNero.innerText = "MODALITÀ OSPITE";
+
+            setTimeout(() => {
+                modalBenvenuto.style.opacity = '0';
+                setTimeout(() => {
+                    modalBenvenuto.style.display = 'none';
+                    aggiornaBarraStato();
+                }, 400);
+            }, 1200);
+        });
+
+        function completaAccesso(username) {
+            localStorage.setItem('minecraft_username', username);
+            localStorage.setItem('minecraft_login_time', new Date().getTime().toString());
+            localStorage.removeItem('minecraft_guest');
+
+            boxFormAccesso.style.display = 'none';
+            boxSalutoNero.style.display = 'block';
+            testoSchermoNero.innerText = `BENVENUTO, ${username.toUpperCase()}!`;
+
+            setTimeout(() => {
+                modalBenvenuto.style.opacity = '0';
+                setTimeout(() => {
+                    modalBenvenuto.style.display = 'none';
+                    aggiornaBarraStato();
+                    verificaStatoUtente(username);
+                }, 400);
+            }, 1500);
+        }
+
+        const modalPremium = document.getElementById('modal-Premium');
+        document.getElementById('apriPremiumLink').addEventListener('click', (e) => {
+            e.preventDefault();
+            modalPremium.style.display = 'flex';
+        });
+        document.getElementById('chiudiModalPremium').addEventListener('click', () => {
+            modalPremium.style.display = 'none';
+        });
+
+        document.getElementById('inviaBtn').addEventListener('click', async () => {
+            const testoVersione = document.getElementById('versionePreferita').value.trim();
+            const stato = document.getElementById('messaggioStato');
+            const currentUser = localStorage.getItem('minecraft_username') || "Ospite";
+
+            if (testoVersione === "") {
+                stato.style.color = "#ff5252";
+                stato.innerText = "Per favore, inserisci una versione!";
+                return;
+            }
+
+            try {
+                await addDoc(collection(db, "preferenze"), {
+                    username: currentUser,
+                    versione: testoVersione,
+                    data: new Date().toLocaleString()
+                });
+
+                stato.style.color = "#4CAF50";
+                stato.innerText = "Grazie! Inviato con successo.";
+                document.getElementById('versionePreferita').value = "";
+            } catch (e) {
+                stato.style.color = "#ff5252";
+                stato.innerText = "Errore durante l'invio.";
+            }
+        });
+    </script>
+</body>
+</html>

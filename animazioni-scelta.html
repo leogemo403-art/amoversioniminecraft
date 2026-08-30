@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scegli il Bottone Animato</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #1a1a1a;
+            color: #ffffff;
+            margin: 0;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #ffeb3b;
+            margin-bottom: 10px;
+        }
+
+        p.subtitle {
+            color: #b0b0b0;
+            margin-bottom: 40px;
+        }
+
+        .grid {
+            max-width: 900px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+            text-align: left;
+        }
+
+        .card {
+            background-color: #2d2d2d;
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid #444;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .card h3 {
+            color: #4CAF50;
+            margin-top: 0;
+            font-size: 1.1rem;
+        }
+
+        /* --- LE 10 ANIMAZIONI PER I BOTTONI --- */
+
+        /* 1. Zoom in e ombra profonda */
+        .btn-1 {
+            background-color: #4CAF50; color: white; padding: 12px 20px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .btn-1:hover { transform: scale(1.08); box-shadow: 0 8px 20px rgba(76, 175, 80, 0.5); }
+
+        /* 2. Scivolamento verso l'alto (Lift) */
+        .btn-2 {
+            background-color: #2196F3; color: white; padding: 12px 20px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;
+            transition: transform 0.3s ease, background-color 0.3s;
+        }
+        .btn-2:hover { transform: translateY(-5px); background-color: #1e88e5; }
+
+        /* 3. Bordo luminoso Neon */
+        .btn-3 {
+            background-color: #333; color: #ffeb3b; padding: 12px 20px; border: 2px solid #ffeb3b; border-radius: 6px; font-weight: bold; cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .btn-3:hover { background-color: #ffeb3b; color: #1a1a1a; box-shadow: 0 0 15px #ffeb3b; }
+
+        /* 4. Rotazione leggera giocosa */
+        .btn-4 {
+            background-color: #9c27b0; color: white; padding: 12px 20px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        .btn-4:hover { transform: rotate(3deg) scale(1.05); }
+
+        /* 5. Effetto rimbalzo elastico al click */
+        @keyframes bounceClick {
+            0% { transform: scale(1); }
+            50% { transform: scale(0.9); }
+            100% { transform: scale(1.05); }
+        }
+        .btn-5 {
+            background-color: #ff5722; color: white; padding: 12px 20px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .btn-5:active { animation: bounceClick 0.3s ease; }
+
+        /* 6. Allungamento (Stretch orizzontale) */
+        .btn-6 {
+            background-color: #009688; color: white; padding: 12px 20px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;
+            transition: padding 0.3s ease, background-color 0.3s;
+        }
+        .btn-6:hover { padding-left: 30px; padding-right: 30px; background-color: #00796b; }
+
+        /* 7. Sfumatura gradiente dinamica */
+        .btn-7 {
+            background: linear-gradient(135deg, #f50057, #ff9100); color: white; padding: 12px 20px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;
+            transition: filter 0.3s, transform 0.3s;
+        }
+        .btn-7:hover { filter: brightness(1.2); transform: scale(1.05); }
+
+        /* 8. Effetto pulsazione continua (Pulse) */
+        @keyframes continuousPulse {
+            0% { box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(76, 175, 80, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(76, 175, 80, 0); }
+        }
+        .btn-8 {
+            background-color: #4CAF50; color: white; padding: 12px 20px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;
+            animation: continuousPulse 2s infinite;
+        }
+
+        /* 9. Scomparsa e scatto del bordo */
+        .btn-9 {
+            background-color: transparent; color: white; padding: 12px 20px; border: 2px solid white; border-radius: 6px; font-weight: bold; cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .btn-9:hover { background-color: white; color: #1a1a1a; border-color: white; }
+
+        /* 10. Cambia colore continuo da sola (Rainbow Button) */
+        @keyframes rainbowCycle {
+            0% { background-color: #e91e63; }
+            33% { background-color: #3f51b5; }
+            66% { background-color: #009688; }
+            100% { background-color: #e91e63; }
+        }
+        .btn-10 {
+            background-color: #e91e63; color: white; padding: 12px 20px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;
+            animation: rainbowCycle 4s linear infinite;
+        }
+
+        .back-container {
+            grid-column: span 2;
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .back-btn {
+            display: inline-block; background-color: #555; color: white; padding: 12px 24px; text-decoration: none; font-weight: bold; border-radius: 6px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Galleria Bottoni Animati</h1>
+    <p class="subtitle">Testa i bottoni e dimmi quale numero preferisci!</p>
+
+    <div class="grid">
+        <div class="card">
+            <h3>1. Zoom & Ombra</h3>
+            <button class="btn-1">Cliccami</button>
+        </div>
+        <div class="card">
+            <h3>2. Sollevamento</h3>
+            <button class="btn-2">Cliccami</button>
+        </div>
+        <div class="card">
+            <h3>3. Neon Giallo</h3>
+            <button class="btn-3">Cliccami</button>
+        </div>
+        <div class="card">
+            <h3>4. Rotazione Leggera</h3>
+            <button class="btn-4">Cliccami</button>
+        </div>
+        <div class="card">
+            <h3>5. Rimbalzo al Click</h3>
+            <button class="btn-5">Cliccami</button>
+        </div>
+        <div class="card">
+            <h3>6. Espansione Orizzontale</h3>
+            <button class="btn-6">Cliccami</button>
+        </div>
+        <div class="card">
+            <h3>7. Gradiente Luminoso</h3>
+            <button class="btn-7">Cliccami</button>
+        </div>
+        <div class="card">
+            <h3>8. Onda Pulsante</h3>
+            <button class="btn-8">Cliccami</button>
+        </div>
+        <div class="card">
+            <h3>9. Inversione Bordo/Pieno</h3>
+            <button class="btn-9">Cliccami</button>
+        </div>
+        <div class="card">
+            <h3>10. Colore Dinamico Continuo</h3>
+            <button class="btn-10">Cliccami</button>
+        </div>
+
+        <div class="back-container">
+            <a href="index.html" class="back-btn">Torna alla Home</a>
+        </div>
+    </div>
+
+</body>
+</html>

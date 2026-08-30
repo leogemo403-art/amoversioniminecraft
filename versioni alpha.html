@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Versioni Alpha e Origini - Minecraft</title>
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes bounceClick {
+            0% { transform: scale(1); }
+            50% { transform: scale(0.9); }
+            100% { transform: scale(1.05); }
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #1a1a1a;
+            color: #ffffff;
+            margin: 0;
+            padding: 40px 20px;
+            text-align: center;
+            animation: fadeIn 0.8s ease-out;
+            transition: background-color 0.4s ease, color 0.4s ease;
+        }
+
+        .theme-selector-container {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(30, 30, 30, 0.85);
+            padding: 8px 12px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(5px);
+        }
+
+        .theme-selector-container label {
+            font-size: 0.9rem;
+            margin-right: 8px;
+            color: #ffeb3b;
+            font-weight: bold;
+        }
+
+        #theme-select {
+            background-color: #2d2d2d;
+            color: #ffffff;
+            border: 1px solid #555;
+            padding: 6px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        h1 {
+            color: #4CAF50;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        p.subtitle {
+            font-size: 1.1rem;
+            color: #b0b0b0;
+            margin-bottom: 40px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background-color: #2d2d2d;
+            margin-bottom: 20px;
+            padding: 25px;
+            border-radius: 12px;
+            border: 1px solid #444;
+            text-align: left;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.4s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .card h2 {
+            color: #ffeb3b;
+            margin-top: 0;
+            font-size: 1.4rem;
+        }
+
+        .card p {
+            color: #cccccc;
+            font-size: 0.95rem;
+        }
+
+        /* Bottone Formato 1 + 5 */
+        .btn {
+            display: inline-block;
+            margin-top: 15px;
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.2s ease;
+        }
+
+        .btn:hover {
+            background: linear-gradient(135deg, #45a049, #3d8b40);
+            transform: scale(1.08);
+            box-shadow: 0 8px 20px rgba(76, 175, 80, 0.6);
+        }
+
+        .btn:active {
+            animation: bounceClick 0.3s ease;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-top: 30px;
+            background: linear-gradient(135deg, #555, #444);
+            color: white;
+            padding: 12px 24px;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.2s ease;
+        }
+
+        .back-btn:hover {
+            background: linear-gradient(135deg, #666, #555);
+            transform: scale(1.08);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .back-btn:active {
+            animation: bounceClick 0.3s ease;
+        }
+
+        /* Light Mode Styling */
+        body.light-mode {
+            background-color: #f0f0f0;
+            color: #1a1a1a;
+        }
+
+        body.light-mode h1 { color: #2e7d32; }
+        body.light-mode p.subtitle { color: #555555; }
+
+        body.light-mode .card {
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        body.light-mode .card h2 { color: #f57f17; }
+        body.light-mode .card p { color: #444444; }
+
+        body.light-mode .theme-selector-container {
+            background: rgba(240, 240, 240, 0.9);
+            border: 1px solid rgba(0, 0, 0, 0.2);
+        }
+
+        body.light-mode #theme-select {
+            background-color: #ffffff;
+            color: #1a1a1a;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="theme-selector-container">
+        <label for="theme-select">Tema:</label>
+        <select id="theme-select">
+            <option value="dark">🌙 Notte (Scuro)</option>
+            <option value="light">☀️ Giorno (Chiaro)</option>
+        </select>
+    </div>
+
+    <h1>Versioni Alpha e Origini (2009 - 2010)</h1>
+    <p class="subtitle">Scegli una versione per aprire la sua pagina dedicata con tutti i dettagli[cite: 10].</p>
+
+    <div class="container">
+        
+        <div class="card">
+            <h2>Minecraft Classic, Indev e Infdev (2009)</h2>
+            <p>La nascita del progetto, i mondi limitati a isole fluttuanti e l'arrivo della generazione infinita[cite: 10].</p>
+            <a href="2009-dettagli.html" class="btn">Vedi Changelog Completo</a>
+        </div>
+
+        <div class="card">
+            <h2>Minecraft Alpha v1.0.0 – v1.0.16 (2010)</h2>
+            <p>L'introduzione del crafting a griglia e i primi circuiti rudimentali in Redstone[cite: 10].</p>
+            <a href="alpha-1.0.html" class="btn">Vedi Changelog Completo</a>
+        </div>
+
+        <div class="card">
+            <h2>Minecraft Alpha v1.1.0 – v1.1.2 (Agosto 2010)</h2>
+            <p>La storica apertura del portale e l'aggiunta della dimensione del Nether[cite: 10].</p>
+            <a href="alpha-1.1.html" class="btn">Vedi Changelog Completo</a>
+        </div>
+
+        <div class="card">
+            <h2>Minecraft Alpha v1.2.0 – v1.2.6 (Halloween Update)</h2>
+            <p>L'arrivo dei letti, dei Ghast, delle zucche e la fine dell'era Alpha[cite: 10].</p>
+            <a href="alpha-1.2.html" class="btn">Vedi Changelog Completo</a>
+        </div>
+
+    </div>
+
+    <a href="index.html" class="back-btn">Torna alla Home</a>
+
+    <script>
+        const themeSelect = document.getElementById('theme-select');
+        const body = document.body;
+
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'light') {
+            body.classList.add('light-mode');
+            themeSelect.value = 'light';
+        } else {
+            themeSelect.value = 'dark';
+        }
+
+        themeSelect.addEventListener('change', function() {
+            if (this.value === 'light') {
+                body.classList.add('light-mode');
+                localStorage.setItem('theme', 'light');
+            } else {
+                body.classList.remove('light-mode');
+                localStorage.setItem('theme', 'dark');
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minecraft Alpha v1.0.0 - Dettagli</title>
+    <style>
+        @keyframes bounceClick {
+            0% { transform: scale(1); }
+            50% { transform: scale(0.9); }
+            100% { transform: scale(1.05); }
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #1a1a1a;
+            color: #ffffff;
+            margin: 0;
+            padding: 40px 20px;
+            text-align: center;
+            transition: background-color 0.4s ease, color 0.4s ease;
+        }
+
+        .theme-selector-container {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(30, 30, 30, 0.85);
+            padding: 8px 12px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(5px);
+        }
+
+        .theme-selector-container label {
+            font-size: 0.9rem;
+            margin-right: 8px;
+            color: #ffeb3b;
+            font-weight: bold;
+        }
+
+        #theme-select {
+            background-color: #2d2d2d;
+            color: #ffffff;
+            border: 1px solid #555;
+            padding: 6px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: left;
+            background-color: #2d2d2d;
+            padding: 30px;
+            border-radius: 12px;
+            border: 1px solid #444;
+            transition: background-color 0.4s ease, border-color 0.4s ease;
+        }
+
+        h1 { color: #ffeb3b; }
+        ul { margin: 10px 0 20px 20px; color: #cccccc; }
+        li { margin-bottom: 10px; }
+
+        .back-btn {
+            display: inline-block;
+            margin-top: 30px;
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+            padding: 12px 24px;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.2s ease;
+        }
+
+        .back-btn:hover {
+            background: linear-gradient(135deg, #45a049, #3d8b40);
+            transform: scale(1.08);
+            box-shadow: 0 8px 20px rgba(76, 175, 80, 0.6);
+        }
+
+        .back-btn:active {
+            animation: bounceClick 0.3s ease;
+        }
+
+        body.light-mode {
+            background-color: #f0f0f0;
+            color: #1a1a1a;
+        }
+
+        body.light-mode .container {
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        body.light-mode h1 { color: #d32f2f; }
+        body.light-mode ul { color: #444444; }
+
+        body.light-mode .theme-selector-container {
+            background: rgba(240, 240, 240, 0.9);
+            border: 1px solid rgba(0, 0, 0, 0.2);
+        }
+
+        body.light-mode #theme-select {
+            background-color: #ffffff;
+            color: #1a1a1a;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="theme-selector-container">
+        <label for="theme-select">Tema:</label>
+        <select id="theme-select">
+            <option value="dark">🌙 Notte (Scuro)</option>
+            <option value="light">☀️ Giorno (Chiaro)</option>
+        </select>
+    </div>
+
+    <div class="container">
+        <h1>Minecraft Alpha v1.0.0 – v1.0.16 (Giugno – Agosto 2010)</h1>
+        <p>Le versioni che hanno gettato le vere basi del gameplay survival e del crafting avanzato[cite: 5].</p>
+        
+        <ul>
+            <li><strong>Crafting a griglia:</strong> Introduzione definitiva del sistema di crafting 2x2 basato su griglia sia nell'inventario che nel banco da lavoro 3x3[cite: 5].</li>
+            <li><strong>Pietra Rossa (Redstone):</strong> Aggiunta dei primi elementi di polvere di pietra rossa per la creazione di circuiti logici elementari[cite: 5].</li>
+            <li><strong>Nuovi blocchi:</strong> Inserimento dei blocchi di lapislazzuli, della lana colorata e dei primi mattoni decorativi per le costruzioni[cite: 5].</li>
+            <li><strong>Multigiocatore e Barche:</strong> Stabilità notevolmente migliorata per i server multiplayer e introduzione delle prime barche funzionanti sull'acqua[cite: 5].</li>
+        </ul>
+
+        <a href="versioni alpha.html" class="back-btn">Indietro</a>
+    </div>
+
+    <script>
+        const themeSelect = document.getElementById('theme-select');
+        const body = document.body;
+
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'light') {
+            body.classList.add('light-mode');
+            themeSelect.value = 'light';
+        } else {
+            themeSelect.value = 'dark';
+        }
+
+        themeSelect.addEventListener('change', function() {
+            if (this.value === 'light') {
+                body.classList.add('light-mode');
+                localStorage.setItem('theme', 'light');
+            } else {
+                body.classList.remove('light-mode');
+                localStorage.setItem('theme', 'dark');
+            }
+        });
+    </script>
+</body>
+</html>
