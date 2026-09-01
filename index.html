@@ -425,24 +425,6 @@
             <button class="btn" disabled style="background: #555555 !important; color: #aaaaaa !important; cursor: not-allowed; box-shadow: none; transform: none;">in arrivo...</button>
         </div>
     </div>
-    
-        <div class="card searchable-card" data-keywords="1.21.11 subversioni aggiornamenti in anticipo">
-            <h2>
-            CONTEST!</span>
-            </h2>
-            <h4>invia più bug/consigli che puoi (validi) e potrai vincere un vip di 3 mesi e la tua skin dentro al sito! (contest attivo per la beta)</h4>
-            <button class="btn" disabled style="background: #555555 !important; color: #aaaaaa !important; cursor: not-allowed; box-shadow: none; transform: none;">inviane più che puoi sui feedback!</button>
-        </div>
-
-    <!-- SEZIONE CHANGELOG DINAMICA CARICATA DA FIREBASE -->
-    <div class="section-box full-width-box" id="sezioneChangelog">
-        <h3 style="margin-top: 0; color: #4CAF50;">📋 Ultime Novità & Changelog</h3>
-        <p>Scopri gli ultimi aggiornamenti applicati all'archivio:</p>
-        
-        <div id="listaChangelogDinamica">
-            <p style="color: #888; font-style: italic;">Caricamento novità dal database...</p>
-        </div>
-    </div>
 
     <div class="section-box full-width-box">
         <h3 style="margin-top: 0;">Qual è la tua versione preferita?</h3>
@@ -455,7 +437,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, setDoc, getDoc, doc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, setDoc, getDoc, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyC2a2DiYisJg7-a70zd5Lv-f8C9-ZKZl00",
@@ -470,94 +452,7 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // --- ASCOLTA I CHANGELOG DAL DATABASE IN TEMPO REALE ---
-        const containerChangelog = document.getElementById('listaChangelogDinamica');
-        const qChangelog = query(collection(db, "changelog"), orderBy("dataCreazione", "desc"));
-        
-        onSnapshot(qChangelog, (snapshot) => {
-            console.log("DEBUG CHANGELOG: Numero documenti trovati ->", snapshot.size);
-            containerChangelog.innerHTML = "";
-            
-            if (snapshot.empty) {
-                console.log("DEBUG CHANGELOG: Nessun documento trovato nella collezione 'changelog'.");
-                containerChangelog.innerHTML = `<p style="color: #aaa;">Nessun changelog pubblicato al momento.</p>`;
-                return;
-            }
-
-            snapshot.forEach((docSnap) => {
-                console.log("DEBUG CHANGELOG: Documento ID:", docSnap.id, "Dati:", docSnap.data());
-                const item = docSnap.data();
-                const divItem = document.createElement('div');
-                divItem.style.cssText = "background: rgba(20, 20, 20, 0.6); padding: 15px; border-radius: 8px; border-left: 4px solid #4CAF50; margin-bottom: 12px;";
-                
-                divItem.innerHTML = `
-                    <h4 style="margin: 0 0 5px 0; color: #ffeb3b;">${item.titolo || "Aggiornamento"}</h4>
-                    <p style="margin: 0; font-size: 0.9rem; color: #ccc; white-space: pre-line;">${item.descrizione || ""}</p>
-                `;
-                containerChangelog.appendChild(divItem);
-            });
-        }, (error) => {
-            console.error("DEBUG ERRORE FIREBASE CHANGELOG:", error);
-        });
-
-        // --- LISTENER IN TEMPO REALE (GESTIONE RIAVVIO/UPDATE) ---
-        onSnapshot(doc(db, "sistema", "stato"), (docSnapshot) => {
-            if (docSnapshot.exists()) {
-                const dati = docSnapshot.data();
-                
-                if (dati.statoSito === "manutenzione" || dati.statoSito === "riavvio") {
-                    const aggiornamentoCompletato = sessionStorage.getItem('aggiornamento_completato');
-                    if (!aggiornamentoCompletato) {
-                        mostraAvvisoRiavvio(dati.messaggio || "Il sito si riavvierà a breve!");
-                    }
-                } else {
-                    const banner = document.getElementById('avvisoRiavvioGlobale');
-                    if (banner) banner.remove();
-                    sessionStorage.removeItem('aggiornamento_completato');
-                }
-            }
-        });
-
-        function mostraAvvisoRiavvio(messaggio) {
-            let banner = document.getElementById('avvisoRiavvioGlobale');
-            if (!banner) {
-                banner = document.createElement('div');
-                banner.id = 'avvisoRiavvioGlobale';
-                banner.style.cssText = "position: fixed; top: 0; left: 0; width: 100%; background: #d32f2f; color: white; text-align: center; padding: 15px; font-weight: bold; z-index: 10000; box-shadow: 0 4px 10px rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center; gap: 20px;";
-                
-                const testoSpan = document.createElement('span');
-                testoSpan.id = 'testoAvvisoRiavvio';
-                banner.appendChild(testoSpan);
-
-                const btnFine = document.createElement('button');
-                btnFine.id = 'btnFineUpdate';
-                btnFine.innerText = "Fine Update / Mostra Changelog";
-                btnFine.style.cssText = "background: #fff; color: #d32f2f; border: none; padding: 6px 12px; border-radius: 4px; font-weight: bold; cursor: pointer;";
-                
-                btnFine.addEventListener('click', () => {
-                    sessionStorage.setItem('aggiornamento_completato', 'true');
-                    if (banner) banner.remove();
-
-                    const sezioneChangelog = document.getElementById('sezioneChangelog');
-                    if (sezioneChangelog) {
-                        sezioneChangelog.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                        sezioneChangelog.classList.add('evidenziato');
-                        setTimeout(() => {
-                            sezioneChangelog.classList.remove('evidenziato');
-                        }, 1200);
-                    }
-                });
-
-                banner.appendChild(btnFine);
-                document.body.prepend(banner);
-            }
-            const testoSpan = document.getElementById('testoAvvisoRiavvio');
-            if (testoSpan) {
-                testoSpan.innerText = `⚠️ ATTENZIONE: ${messaggio}`;
-            }
-        }
-        // ------------------------------------------------------------------
-
+        // Gestione Tema
         const themeSelect = document.getElementById('theme-select');
         const body = document.body;
 
@@ -580,24 +475,19 @@
             }
         });
 
+        // Configurazione Barra di Ricerca e Suggerimenti con Reindirizzamento File
         const searchInput = document.getElementById('searchInput');
         const searchSuggestions = document.getElementById('searchSuggestions');
         const searchableCards = document.querySelectorAll('.searchable-card');
 
-        const itemsDaCercare = Array.from(searchableCards).map(card => {
-            return {
-                titolo: card.querySelector('h2').innerText,
-                keywords: card.getAttribute('data-keywords') || "",
-                link: card.querySelector('.btn') ? card.querySelector('.btn').getAttribute('href') : "#"
-            };
-        });
-
-        const elementiExtra = [
-            { titolo: "1.21", keywords: "scopri la 1.21", link: "versioni/1.21.html" },
-            { titolo: "Tricky Trials", keywords: "tricky trials 1.21 scopri la 1.21", link: "versioni/1.21.html" }
+        // Elenco delle pagine e dei file collegati direttamente ai suggerimenti
+        const pagineArchivio = [
+            { titolo: "Nuove Versioni 2026", keywords: "anno 2026 nuove versioni recenti", link: "versioni annuali/nuove versioni.html" },
+            { titolo: "Tutte le Versioni", keywords: "tutte le versioni archivio completo", link: "versioni/tutte le versioni.html" },
+            { titolo: "Versioni Alpha", keywords: "era alpha passato origini primissime build", link: "versioni alpha.html" },
+            { titolo: "Feedback & Bug", keywords: "consigli bug report segnalazioni supporto", link: "feedback.html" },
+            { titolo: "1.21", keywords: "scopri la 1.21 tricky trials", link: "versioni/1.21.html" }
         ];
-
-        const tuttiGliItem = [...itemsDaCercare, ...elementiExtra];
 
         searchInput.addEventListener('input', (e) => {
             const query = e.target.value.toLowerCase().trim();
@@ -609,10 +499,11 @@
                 return;
             }
 
+            // Filtra le card visibili nella pagina
             searchableCards.forEach(card => {
                 const titolo = card.querySelector('h2').innerText.toLowerCase();
-                const desc = card.querySelector('p').innerText.toLowerCase();
-                const keywords = card.getAttribute('data-keywords').toLowerCase();
+                const desc = card.querySelector('p') ? card.querySelector('p').innerText.toLowerCase() : "";
+                const keywords = card.getAttribute('data-keywords') ? card.getAttribute('data-keywords').toLowerCase() : "";
 
                 if (titolo.includes(query) || desc.includes(query) || keywords.includes(query)) {
                     card.style.display = 'flex';
@@ -621,7 +512,8 @@
                 }
             });
 
-            const consigliati = tuttiGliItem.filter(item => 
+            // Filtra e mostra i suggerimenti cliccabili che reindirizzano ai file
+            const consigliati = pagineArchivio.filter(item => 
                 item.titolo.toLowerCase().includes(query) || 
                 item.keywords.toLowerCase().includes(query)
             );
@@ -629,23 +521,25 @@
             if (consigliati.length > 0) {
                 searchSuggestions.style.display = 'block';
                 consigliati.forEach(item => {
-                    const div = document.createElement('a');
-                    div.className = 'search-suggestion-item';
-                    div.innerHTML = `<b>${item.titolo}</b> - <span style="font-size:0.85rem; color:#aaa;">Vai direttamente</span>`;
-                    div.href = item.link;
-                    searchSuggestions.appendChild(div);
+                    const linkElement = document.createElement('a');
+                    linkElement.className = 'search-suggestion-item';
+                    linkElement.href = item.link;
+                    linkElement.innerHTML = `<b>${item.titolo}</b> - <span style="font-size:0.85rem; color:#aaa;">Vai al file</span>`;
+                    searchSuggestions.appendChild(linkElement);
                 });
             } else {
                 searchSuggestions.style.display = 'none';
             }
         });
 
+        // Chiude i suggerimenti se si clicca fuori
         document.addEventListener('click', (e) => {
             if (!searchInput.contains(e.target) && !searchSuggestions.contains(e.target)) {
                 searchSuggestions.style.display = 'none';
             }
         });
 
+        // Autenticazione e Modale
         const modalBenvenuto = document.getElementById('modal-Benvenuto');
         const boxFormAccesso = document.getElementById('boxFormAccesso');
         const boxSalutoNero = document.getElementById('boxSalutoNero');
