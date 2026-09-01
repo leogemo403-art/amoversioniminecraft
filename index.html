@@ -417,12 +417,10 @@
             <a href="feedback.html" class="btn" style="background: linear-gradient(135deg, #2196F3, #1976D2);">INVIA UN FEEDBACK</a>
         </div>
 
-        <div class="card searchable-card" data-keywords="1.21.11 subversioni aggiornamenti in anticipo">
-            <h2>
-                <span style="color: rgb(65, 64, 64);">1.21.</span><span style="color: black;">11</span>
-            </h2>
-            <h3>Subversioni in arrivo!</h3>
-            <button class="btn" disabled style="background: #555555 !important; color: #aaaaaa !important; cursor: not-allowed; box-shadow: none; transform: none;">in arrivo...</button>
+        <div class="card searchable-card" data-keywords="contest vip skin beta bug consigli">
+            <h2>CONTEST!</h2>
+            <p>Invia più bug/consigli che puoi (validi) e potrai vincere un vip di 3 mesi e la tua skin dentro al sito! (contest attivo per la beta)</p>
+            <button class="btn" disabled style="background: #555555 !important; color: #aaaaaa !important; cursor: not-allowed; box-shadow: none; transform: none;">inviane più che puoi sui feedback!</button>
         </div>
     </div>
 
@@ -437,7 +435,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, setDoc, getDoc, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, setDoc, getDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyC2a2DiYisJg7-a70zd5Lv-f8C9-ZKZl00",
@@ -486,6 +484,7 @@
             { titolo: "Tutte le Versioni", keywords: "tutte le versioni archivio completo", link: "versioni/tutte le versioni.html" },
             { titolo: "Versioni Alpha", keywords: "era alpha passato origini primissime build", link: "versioni alpha.html" },
             { titolo: "Feedback & Bug", keywords: "consigli bug report segnalazioni supporto", link: "feedback.html" },
+            { titolo: "Contest", keywords: "contest vip skin beta bug consigli", link: "feedback.html" },
             { titolo: "1.21", keywords: "scopri la 1.21 tricky trials", link: "versioni/1.21.html" }
         ];
 
