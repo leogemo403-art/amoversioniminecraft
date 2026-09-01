@@ -14,7 +14,7 @@
             text-align: center;
         }
         .container {
-            max-width: 900px;
+            max-width: 1000px;
             margin: 0 auto;
             background: rgba(30, 30, 30, 0.85);
             padding: 30px;
@@ -46,96 +46,90 @@
         th, td {
             padding: 10px;
             border-bottom: 1px solid #444;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
         }
         th { color: #4CAF50; }
         .btn {
             background: linear-gradient(135deg, #4CAF50, #45a049);
             color: white;
             border: none;
-            padding: 8px 14px;
+            padding: 10px 16px;
             font-size: 14px;
             font-weight: bold;
             border-radius: 6px;
             cursor: pointer;
         }
-        .btn-elimina { background: #ff5252; color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; }
-        .btn-banna { background: #ff9800; color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; margin-left: 5px; }
-        input, select {
-            padding: 8px;
+        .btn-danger { background: #e53935; }
+        .btn-warning { background: #ff9800; }
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
             border-radius: 6px;
             border: 1px solid #555;
             background: #222;
             color: #fff;
-            margin: 5px;
-            width: 80%;
+            margin: 5px 0 15px 0;
+            box-sizing: border-box;
         }
-        .hidden {
-            display: none !important;
-        }
+        textarea { resize: vertical; height: 80px; }
+        .hidden { display: none !important; }
     </style>
 </head>
 <body>
 
-    <!-- SCHERMATA DI LOGIN (AUTENTICAZIONE FIREBASE) -->
+    <!-- LOGIN ADMIN -->
     <div id="loginSection" class="login-box">
         <h2>Accesso Admin Sicuro</h2>
-        <p>Inserisci le tue credenziali di amministratore:</p>
-        <input type="email" id="inputEmail" placeholder="Email admin..."><br>
-        <input type="password" id="inputPassword" placeholder="Password..."><br><br>
-        <button id="btnAccedi" class="btn" style="width: 85%;">Accedi</button>
+        <p>Inserisci le tue credenziali:</p>
+        <input type="email" id="inputEmail" placeholder="Email admin...">
+        <input type="password" id="inputPassword" placeholder="Password...">
+        <button id="btnAccedi" class="btn" style="width: 100%;">Accedi</button>
         <p id="statoLogin" style="font-size: 0.85rem; margin-top: 10px; color: #ff5252;"></p>
     </div>
 
-    <!-- PANNELLO DI CONTROLLO (NASCOSTO FINO AL LOGIN) -->
+    <!-- PANNELLO DI CONTROLLO -->
     <div id="adminPanel" class="container hidden">
-        <h2>Pannello di Controllo & Moderazione</h2>
-        <p style="text-align: center;">Benvenuto, Amministratore.</p>
+        <h2>Pannello di Controllo & Gestione Sito</h2>
 
-        <!-- SEZIONE 1: PREFERENZE -->
-        <h3>Preferenze Inviate dai Visitatori</h3>
-        <table>
-            <thead>
-                <tr>
-                    <th>Nome Utente</th>
-                    <th>Versione</th>
-                    <th>Data e Ora</th>
-                    <th>Azioni</th>
-                </tr>
-            </thead>
-            <tbody id="tabellaRisposteBody"></tbody>
-        </table>
+        <!-- SEZIONE GESTIONE MANUTENZIONE E CHANGELOG -->
+        <h3>📢 Gestione Riavvio e Changelog in Tempo Reale</h3>
+        <p>Avvisa gli utenti del riavvio imminente o pubblica le novità dell'ultimo update.</p>
+        <label for="inputChangelog">Testo Changelog dell'aggiornamento:</label>
+        <textarea id="inputChangelog" placeholder="Es. - Aggiunta nuova UI - Risolti bug critici..."></textarea>
+        <div style="display: flex; gap: 10px;">
+            <button id="btnAvviaManutenzione" class="btn btn-warning" style="flex: 1;">⚠️ Avvia Avviso Riavvio (1 Minuto)</button>
+            <button id="btnFineManutenzione" class="btn" style="flex: 1; background: #2196F3;">✅ Fine Update & Mostra Changelog</button>
+        </div>
 
-        <!-- SEZIONE 2: GESTIONE BAN -->
-        <h3>Gestione Ban Utenti</h3>
-        <input type="text" id="inputUsernameBan" placeholder="Nome utente da bannare..." style="width: auto;">
-        <select id="tipoBan" style="width: auto;">
+        <!-- SEZIONE GESTIONE BAN -->
+        <h3>🛠️ Gestione Ban Utenti</h3>
+        <p>Banna un utente indesiderato in modo permanente o temporaneo (24 ore).</p>
+        <input type="text" id="adminTargetUser" placeholder="Username da bannare...">
+        <select id="adminTipoBan">
             <option value="permanente">Ban Permanente</option>
-            <option value="1giorno">Temp-Ban (24 Ore)</option>
+            <option value="1giorno">Ban Temporaneo (24 Ore)</option>
         </select>
-        <button id="btnEseguiBan" class="btn" style="background: #e53935;">Banna</button>
-        <p id="statoBan" style="font-size: 0.85rem; margin-top: 5px;"></p>
+        <button id="btnEseguiBan" class="btn btn-danger" style="width: 100%;">Conferma Ban</button>
+        <p id="adminMessaggioStato" style="margin-top: 10px; font-size: 0.9rem;"></p>
 
-        <h3>Lista Utenti Bannati</h3>
+        <!-- SEZIONE FEEDBACK -->
+        <h3>Feedback, Bug e Proposte</h3>
         <table>
             <thead>
                 <tr>
                     <th>Nome Utente</th>
-                    <th>Tipo di Ban</th>
-                    <th>Data Ban</th>
+                    <th>Tipo / Messaggio</th>
+                    <th>Data</th>
                     <th>Azioni</th>
                 </tr>
             </thead>
-            <tbody id="tabellaBannatiBody"></tbody>
+            <tbody id="tabellaFeedbackBody"></tbody>
         </table>
 
-        <!-- SEZIONE 3: GESTIONE VIP -->
-        <h3>Attiva Stato VIP per un Utente</h3>
-        <input type="text" id="inputUsernamePremium" placeholder="Nome utente..." style="width: auto;">
-        <button id="btnAttivaPremium" class="btn">Attiva VIP</button>
-        <p id="statoPremium" style="font-size: 0.85rem; margin-top: 5px;"></p>
-
-        <h3>Lista Utenti VIP Attivi</h3>
+        <!-- SEZIONE VIP -->
+        <h3>Gestione Stato VIP</h3>
+        <input type="text" id="inputUsernamePremium" placeholder="Nome utente..." style="width: 60%; display: inline-block;">
+        <button id="btnAttivaPremium" class="btn" style="display: inline-block; width: 35%;">Attiva VIP</button>
         <table>
             <thead>
                 <tr>
@@ -148,7 +142,7 @@
         </table>
     </div>
 
-    <!-- Script con Firebase Auth -->
+    <!-- SCRIPT FIREBASE ADMIN -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
@@ -168,82 +162,93 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // Gestione Click Login
         document.getElementById('btnAccedi').addEventListener('click', async () => {
             const email = document.getElementById('inputEmail').value.trim();
             const password = document.getElementById('inputPassword').value.trim();
-            const pStato = document.getElementById('statoLogin');
-
             try {
                 await signInWithEmailAndPassword(auth, email, password);
-                // Se il login riesce, mostra il pannello e carica i dati
                 document.getElementById('loginSection').classList.add('hidden');
                 document.getElementById('adminPanel').classList.remove('hidden');
-                caricaRisposte();
-                caricaBannati();
+                caricaFeedback();
                 caricaVip();
             } catch (error) {
-                pStato.innerText = "Credenziali non valide o accesso non autorizzato.";
+                document.getElementById('statoLogin').innerText = "Credenziali non valide.";
             }
         });
 
-        async function caricaRisposte() {
-            const tabellaBody = document.getElementById('tabellaRisposteBody');
-            tabellaBody.innerHTML = "";
-            const querySnapshot = await getDocs(collection(db, "preferenze"));
+        // Gestione Manutenzione & Changelog
+        document.getElementById('btnAvviaManutenzione').addEventListener('click', async () => {
+            try {
+                await setDoc(doc(db, "sistema", "stato"), {
+                    statoSito: "manutenzione",
+                    messaggio: "⚠️ Riavvio del sito imminente tra 1 minuto per applicare modifiche!"
+                }, { merge: true });
+                alert("Avviso di riavvio inviato a tutti i client in tempo reale!");
+            } catch (err) { console.error(err); }
+        });
+
+        document.getElementById('btnFineManutenzione').addEventListener('click', async () => {
+            const changelogTesto = document.getElementById('inputChangelog').value.trim();
+            if (!changelogTesto) {
+                alert("Scrivi prima il changelog dell'aggiornamento!");
+                return;
+            }
+            try {
+                await setDoc(doc(db, "sistema", "stato"), {
+                    statoSito: "aggiornato",
+                    changelog: changelogTesto
+                }, { merge: true });
+                alert("Aggiornamento completato! Gli utenti vedranno il changelog.");
+            } catch (err) { console.error(err); }
+        });
+
+        // Gestione Ban Utenti
+        document.getElementById('btnEseguiBan').addEventListener('click', async () => {
+            const targetUser = document.getElementById('adminTargetUser').value.trim();
+            const tipoBan = document.getElementById('adminTipoBan').value;
+            const statoAdmin = document.getElementById('adminMessaggioStato');
+
+            if (!targetUser) {
+                statoAdmin.style.color = "#ff5252";
+                statoAdmin.innerText = "Inserisci un username valido!";
+                return;
+            }
+
+            const userKey = targetUser.toLowerCase();
+            try {
+                let datiBan = { tipo: tipoBan };
+                if (tipoBan === "1giorno") {
+                    datiBan.scadenza = new Date().getTime() + (24 * 60 * 60 * 1000);
+                }
+                await setDoc(doc(db, "banned", userKey), datiBan);
+                statoAdmin.style.color = "#4CAF50";
+                statoAdmin.innerText = `Utente '${targetUser}' bannato con successo (${tipoBan}).`;
+                document.getElementById('adminTargetUser').value = "";
+            } catch (e) {
+                statoAdmin.style.color = "#ff5252";
+                statoAdmin.innerText = "Errore durante l'esecuzione del ban.";
+            }
+        });
+
+        async function caricaFeedback() {
+            const tb = document.getElementById('tabellaFeedbackBody');
+            tb.innerHTML = "";
+            const querySnapshot = await getDocs(collection(db, "feedback"));
             querySnapshot.forEach((documento) => {
                 const dati = documento.data();
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
                     <td>${dati.username || "Anonimo"}</td>
-                    <td>${dati.versione || "-"}</td>
+                    <td><strong>[${(dati.tipo || "altro").toUpperCase()}]</strong> ${dati.messaggio}</td>
                     <td>${dati.data || "-"}</td>
-                    <td>
-                        <button class="btn-elimina" data-id="${documento.id}">Elimina</button>
-                        <button class="btn-banna" data-utente="${dati.username}">Banna</button>
-                    </td>
-                `;
-                tabellaBody.appendChild(tr);
-            });
-
-            document.querySelectorAll('.btn-elimina').forEach(b => {
-                b.addEventListener('click', async (e) => {
-                    await deleteDoc(doc(db, "preferenze", e.target.getAttribute('data-id')));
-                    caricaRisposte();
-                });
-            });
-
-            document.querySelectorAll('.btn-banna').forEach(b => {
-                b.addEventListener('click', async (e) => {
-                    const u = e.target.getAttribute('data-utente');
-                    if(u && u !== "Anonimo") {
-                        await setDoc(doc(db, "banned", u.toLowerCase()), { tipo: "permanente", dataBanned: new Date().toLocaleString() });
-                        caricaBannati();
-                    }
-                });
-            });
-        }
-
-        async function caricaBannati() {
-            const tb = document.getElementById('tabellaBannatiBody');
-            tb.innerHTML = "";
-            const querySnapshot = await getDocs(collection(db, "banned"));
-            querySnapshot.forEach((documento) => {
-                const dati = documento.data();
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td>${documento.id}</td>
-                    <td>${dati.tipo || "permanente"}</td>
-                    <td>${dati.dataBanned || "-"}</td>
-                    <td><button class="btn-sbanna" data-utente="${documento.id}" style="background: #4CAF50; color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer;">Rimuovi</button></td>
+                    <td><button class="btn btn-danger btn-elimina" data-id="${documento.id}" style="padding: 4px 8px; font-size: 12px;">Elimina</button></td>
                 `;
                 tb.appendChild(tr);
             });
-
-            document.querySelectorAll('.btn-sbanna').forEach(b => {
+            document.querySelectorAll('.btn-elimina').forEach(b => {
                 b.addEventListener('click', async (e) => {
-                    await deleteDoc(doc(db, "banned", e.target.getAttribute('data-utente')));
-                    caricaBannati();
+                    await deleteDoc(doc(db, "feedback", e.target.getAttribute('data-id')));
+                    caricaFeedback();
                 });
             });
         }
@@ -253,16 +258,14 @@
             tv.innerHTML = "";
             const querySnapshot = await getDocs(collection(db, "premium"));
             querySnapshot.forEach((documento) => {
-                const dati = documento.data();
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
                     <td>${documento.id}</td>
-                    <td>${dati.dataAttivazione || "-"}</td>
-                    <td><button class="btn-rimuovi-vip" data-utente="${documento.id}" style="background: #e53935; color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer;">Rimuovi</button></td>
+                    <td>${documento.dataAttivazione || "-"}</td>
+                    <td><button class="btn btn-danger btn-rimuovi-vip" data-utente="${documento.id}" style="padding: 4px 8px; font-size: 12px;">Rimuovi</button></td>
                 `;
                 tv.appendChild(tr);
             });
-
             document.querySelectorAll('.btn-rimuovi-vip').forEach(b => {
                 b.addEventListener('click', async (e) => {
                     await deleteDoc(doc(db, "premium", e.target.getAttribute('data-utente')));
@@ -271,18 +274,9 @@
             });
         }
 
-        document.getElementById('btnEseguiBan').addEventListener('click', async () => {
-            const user = document.getElementById('inputUsernameBan').value.trim().toLowerCase();
-            const tipo = document.getElementById('tipoBan').value;
-            if(!user) return;
-            await setDoc(doc(db, "banned", user), { tipo: tipo, dataBanned: new Date().toLocaleString() });
-            document.getElementById('inputUsernameBan').value = "";
-            caricaBannati();
-        });
-
         document.getElementById('btnAttivaPremium').addEventListener('click', async () => {
             const user = document.getElementById('inputUsernamePremium').value.trim().toLowerCase();
-            if(!user) return;
+            if (!user) return;
             await setDoc(doc(db, "premium", user), { attivo: true, dataAttivazione: new Date().toLocaleString() });
             document.getElementById('inputUsernamePremium').value = "";
             caricaVip();

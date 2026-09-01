@@ -46,7 +46,7 @@
             align-items: center;
             z-index: 9999;
             transition: opacity 0.5s ease;
-            cursor: pointer; /* Indica che si può cliccare per saltare */
+            cursor: pointer;
         }
 
         #intro-video {
@@ -55,7 +55,6 @@
             object-fit: cover;
         }
 
-        /* Testo di suggerimento per saltare l'intro */
         .skip-hint {
             position: absolute;
             bottom: 30px;
@@ -70,12 +69,10 @@
             backdrop-filter: blur(4px);
         }
 
-        /* Contenitore principale nascosto finché il video non finisce */
         #main-page-content {
             display: none;
         }
 
-        /* Selettore Tema */
         .theme-selector-container {
             position: absolute;
             top: 20px;
@@ -113,20 +110,10 @@
             border-radius: 12px;
             border: 1px solid #444;
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
-            animation: fadeIn 0.8s ease-out;
-            transition: background-color 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
         }
 
-        h1 {
-            color: #ffeb3b;
-            margin-top: 0;
-        }
-
-        p.subtitle {
-            font-size: 1.1rem;
-            color: #b0b0b0;
-            margin-bottom: 25px;
-        }
+        h1 { color: #ffeb3b; margin-top: 0; }
+        p.subtitle { font-size: 1.1rem; color: #b0b0b0; margin-bottom: 25px; }
 
         .section-box {
             background-color: #242424;
@@ -134,24 +121,12 @@
             border-radius: 8px;
             border: 1px solid #444;
             margin-bottom: 20px;
-            transition: background-color 0.4s ease, border-color 0.4s ease;
         }
 
-        .section-box h3 {
-            color: #4CAF50;
-            margin-top: 0;
-        }
+        .section-box h3 { color: #4CAF50; margin-top: 0; }
+        .section-box ul { margin: 10px 0 0 20px; color: #cccccc; }
+        .section-box li { margin-bottom: 6px; }
 
-        .section-box ul {
-            margin: 10px 0 0 20px;
-            color: #cccccc;
-        }
-
-        .section-box li {
-            margin-bottom: 6px;
-        }
-
-        /* Bottone Indietro */
         .back-btn {
             display: inline-block;
             margin-top: 20px;
@@ -164,62 +139,17 @@
             border: none;
             cursor: pointer;
             box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);
-            transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.2s ease;
+            transition: transform 0.3s ease;
         }
 
-        .back-btn:hover {
-            background: linear-gradient(135deg, #45a049, #3d8b40);
-            transform: scale(1.08);
-            box-shadow: 0 8px 20px rgba(76, 175, 80, 0.6);
-        }
+        .back-btn:hover { transform: scale(1.08); }
 
-        .back-btn:active {
-            animation: bounceClick 0.3s ease;
-        }
-
-        /* Light Mode Styling */
-        body.light-mode {
-            background-color: #f0f0f0;
-            color: #1a1a1a;
-        }
-
-        body.light-mode .container {
-            background-color: #ffffff;
-            border: 1px solid #ddd;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-        }
-
-        body.light-mode h1 {
-            color: #d32f2f;
-        }
-
-        body.light-mode p.subtitle {
-            color: #555555;
-        }
-
-        body.light-mode .section-box {
-            background-color: #f9f9f9;
-            border: 1px solid #e0e0e0;
-        }
-
-        body.light-mode .section-box h3 {
-            color: #2e7d32;
-        }
-
-        body.light-mode .section-box ul {
-            color: #444444;
-        }
-
-        body.light-mode .theme-selector-container {
-            background: rgba(240, 240, 240, 0.9);
-            border: 1px solid rgba(0, 0, 0, 0.2);
-        }
-
-        body.light-mode #theme-select {
-            background-color: #ffffff;
-            color: #1a1a1a;
-            border: 1px solid #ccc;
-        }
+        body.light-mode { background-color: #f0f0f0; color: #1a1a1a; }
+        body.light-mode .container { background-color: #ffffff; border: 1px solid #ddd; }
+        body.light-mode h1 { color: #d32f2f; }
+        body.light-mode .section-box { background-color: #f9f9f9; border: 1px solid #e0e0e0; }
+        body.light-mode .theme-selector-container { background: rgba(240, 240, 240, 0.9); }
+        body.light-mode #theme-select { background-color: #ffffff; color: #1a1a1a; border: 1px solid #ccc; }
     </style>
 </head>
 <body>
@@ -269,15 +199,12 @@
     </div>
 
     <script>
-        // --- GESTIONE INTRO VIDEO ---
         const video = document.getElementById('introVideo');
         const introContainer = document.getElementById('intro-container');
         const mainPageContent = document.getElementById('main-page-content');
 
         function terminaIntro() {
-            // Evita che venga eseguito più volte se l'utente preme più tasti insieme
             if (introContainer.style.display === 'none') return;
-
             video.pause();
             introContainer.style.opacity = '0';
             setTimeout(() => {
@@ -286,26 +213,19 @@
             }, 500);
         }
 
-        // 1. Quando il video finisce da solo
         video.addEventListener('ended', terminaIntro);
-
-        // 2. Se l'utente clicca sullo schermo
         introContainer.addEventListener('click', terminaIntro);
-
-        // 3. Se l'utente preme la barra spaziatrice sulla tastiera
         document.addEventListener('keydown', (e) => {
             if (e.code === 'Space' || e.key === ' ') {
-                e.preventDefault(); // Impedisce alla pagina di scorrere verso il basso
+                e.preventDefault();
                 terminaIntro();
             }
         });
 
-
-        // --- GESTIONE TEMA GIORNO / NOTTE ---
         const themeSelect = document.getElementById('theme-select');
         const body = document.body;
-
         const savedTheme = localStorage.getItem('theme');
+
         if (savedTheme === 'light') {
             body.classList.add('light-mode');
             themeSelect.value = 'light';

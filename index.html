@@ -9,6 +9,15 @@
             from { opacity: 0; transform: translateY(-25px); }
             to { opacity: 1; transform: translateY(0); }
         }
+        @keyframes evidenziaBox {
+            0% { transform: scale(1); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5); }
+            50% { transform: scale(1.02); box-shadow: 0 0 25px #4CAF50; border-color: #4CAF50; }
+            100% { transform: scale(1); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5); }
+        }
+        .evidenziato {
+            animation: evidenziaBox 1.2s ease-in-out;
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-image: url('foto/Screenshot 2026-08-28 215300.png');
@@ -24,7 +33,6 @@
             transition: background 0.3s ease, color 0.3s ease;
         }
 
-        /* Stile Tema Chiaro (Giorno) */
         body.light-mode {
             background-image: none;
             background-color: #f0f2f5;
@@ -107,7 +115,6 @@
             font-weight: bold;
         }
 
-        /* Box Stato Utente in Alto a Sinistra */
         .user-status-container {
             position: absolute;
             top: 20px;
@@ -143,7 +150,6 @@
             text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.8);
         }
 
-        /* Stile Search Bar e Consigliati */
         .search-container {
             position: relative;
             max-width: 450px;
@@ -195,7 +201,6 @@
             color: #ffeb3b;
         }
 
-        /* GRIGLIA A 3 COLONNE PER LE CARD */
         .cards-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -235,7 +240,6 @@
             flex-grow: 1;
         }
 
-        /* Box a larghezza piena per sezioni speciali */
         .full-width-box {
             max-width: 1100px;
             margin: 25px auto;
@@ -321,10 +325,8 @@
 </head>
 <body>
 
-    <!-- Stato Utente in Alto a Sinistra -->
     <div class="user-status-container" id="userStatusBox"></div>
 
-    <!-- Modale Accesso / Registrazione -->
     <div id="modal-Benvenuto">
         <div class="modal-content">
             <div id="boxFormAccesso">
@@ -352,13 +354,13 @@
         </div>
     </div>
 
-    <!-- Modale Premium -->
+    <!-- Modale Premium con Bottone Acquisto Disabilitato -->
     <div id="modal-Premium" style="display: none;">
         <div class="modal-content" style="border-color: #555;">
-            <h2 style="color: #888; margin-top: 0;">💎 Sistema VIP in Manutenzione</h2>
+            <h2 style="color: #ff9800; margin-top: 0;">💎 Sistema VIP</h2>
             <p style="color: #bbb;">Gli acquisti e le attivazioni tramite PayPal sono temporaneamente disabilitati.</p>
             <p style="font-size: 0.9rem; color: #888; margin-bottom: 25px;">Torneremo presto con nuove funzioni!</p>
-            <button class="btn" disabled style="width: 100%; background: #555; color: #aaa; cursor: not-allowed; box-shadow: none;">Pagamento non disponibile</button>
+            <button class="btn" disabled style="width: 100%; background: #555; color: #aaa; cursor: not-allowed; box-shadow: none;">Acquista VIP (Disabilitato)</button>
             <br><br>
             <button id="chiudiModalPremium" style="background: transparent; border: none; color: #aaa; cursor: pointer; text-decoration: underline;">Chiudi</button>
         </div>
@@ -373,15 +375,14 @@
     </div>
 
     <div class="banner-pubblicitario" id="bannerAd">
-        📢 <b>Pubblicità:</b> Vuoi rimuovere banner come questo? <a href="#" id="apriPremiumLink" style="color: #ffeb3b; font-weight: bold;">Scopri il VIP (In arrivo)</a>
+        📢 <b>Pubblicità:</b> Vuoi rimuovere banner come questo? <a href="#" id="apriPremiumLink" style="color: #ffeb3b; font-weight: bold;">Scopri il VIP</a>
     </div>
 
     <h1>SCOPRI TUTTE LE VERSIONI DI MINECRAFT</h1>
     <p class="subtitle">Esplora le ultime novità e la storia completa delle versioni di Minecraft!</p>
 
-    <!-- Barra di Ricerca con Consigliati -->
     <div class="search-container">
-        <input type="text" id="searchInput" placeholder="Cerca una sezione o versione (es. Anno 2026, Alpha)...">
+        <input type="text" id="searchInput" placeholder="Cerca una sezione o versione...">
         <div id="searchSuggestions" class="search-suggestions"></div>
     </div>
 
@@ -391,7 +392,6 @@
         <a href="#" class="btn btn-premium">ACCEDI ALLE ANTEPRIME</a>
     </div>
 
-    <!-- GRIGLIA A 3 COLONNE PER LE CARD -->
     <div class="cards-grid">
         <div class="card searchable-card" data-keywords="anno 2026 nuove versioni recenti">
             <h2>ANNO 2026</h2>
@@ -411,20 +411,36 @@
             <a href="versioni alpha.html" class="btn">VERSIONI ALPHA</a>
         </div>
 
-        <!-- CARD PER FEEDBACK E BUG REPORT -->
         <div class="card searchable-card" data-keywords="consigli bug report segnalazioni supporto">
             <h2>FEEDBACK & BUG</h2>
             <p>Hai trovato un errore o vuoi suggerire nuove funzioni? Scrivici!</p>
             <a href="feedback.html" class="btn" style="background: linear-gradient(135deg, #2196F3, #1976D2);">INVIA UN FEEDBACK</a>
         </div>
 
-        <!-- CARD 1.21.11 ALLINEATA ALLA GRIGLIA -->
-        <div class="card searchable-card" data-keywords="1.21.11 subversioni">
+        <div class="card searchable-card" data-keywords="1.21.11 subversioni aggiornamenti in anticipo">
             <h2>
-                <span style="color: rgb(65, 64, 64);">1.21.</span><span style="color: black;">11</span>.
+                <span style="color: rgb(65, 64, 64);">1.21.</span><span style="color: black;">11</span>
             </h2>
-            <h3>Stanno arrivando le subversioni!</h3>
+            <h3>Subversioni in arrivo!</h3>
             <button class="btn" disabled style="background: #555555 !important; color: #aaaaaa !important; cursor: not-allowed; box-shadow: none; transform: none;">in arrivo...</button>
+        </div>
+    </div>
+    
+        <div class="card searchable-card" data-keywords="1.21.11 subversioni aggiornamenti in anticipo">
+            <h2>
+            CONTEST!</span>
+            </h2>
+            <h4>invia più bug/consigli che puoi (validi) e potrai vincere un vip di 3 mesi e la tua skin dentro al sito! (contest attivo per la beta)</h4>
+            <button class="btn" disabled style="background: #555555 !important; color: #aaaaaa !important; cursor: not-allowed; box-shadow: none; transform: none;">inviane più che puoi sui feedback!</button>
+        </div>
+
+    <!-- SEZIONE CHANGELOG DINAMICA CARICATA DA FIREBASE -->
+    <div class="section-box full-width-box" id="sezioneChangelog">
+        <h3 style="margin-top: 0; color: #4CAF50;">📋 Ultime Novità & Changelog</h3>
+        <p>Scopri gli ultimi aggiornamenti applicati all'archivio:</p>
+        
+        <div id="listaChangelogDinamica">
+            <p style="color: #888; font-style: italic;">Caricamento novità dal database...</p>
         </div>
     </div>
 
@@ -437,10 +453,9 @@
         <p id="messaggioStato" style="margin-top: 10px; font-size: 0.9rem;"></p>
     </div>
 
-    <!-- Script con elementi extra inseriti direttamente nella ricerca -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, setDoc, getDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, setDoc, getDoc, doc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyC2a2DiYisJg7-a70zd5Lv-f8C9-ZKZl00",
@@ -455,7 +470,94 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // --- GESTIONE TEMA GIORNO / NOTTE ---
+        // --- ASCOLTA I CHANGELOG DAL DATABASE IN TEMPO REALE ---
+        const containerChangelog = document.getElementById('listaChangelogDinamica');
+        const qChangelog = query(collection(db, "changelog"), orderBy("dataCreazione", "desc"));
+        
+        onSnapshot(qChangelog, (snapshot) => {
+            console.log("DEBUG CHANGELOG: Numero documenti trovati ->", snapshot.size);
+            containerChangelog.innerHTML = "";
+            
+            if (snapshot.empty) {
+                console.log("DEBUG CHANGELOG: Nessun documento trovato nella collezione 'changelog'.");
+                containerChangelog.innerHTML = `<p style="color: #aaa;">Nessun changelog pubblicato al momento.</p>`;
+                return;
+            }
+
+            snapshot.forEach((docSnap) => {
+                console.log("DEBUG CHANGELOG: Documento ID:", docSnap.id, "Dati:", docSnap.data());
+                const item = docSnap.data();
+                const divItem = document.createElement('div');
+                divItem.style.cssText = "background: rgba(20, 20, 20, 0.6); padding: 15px; border-radius: 8px; border-left: 4px solid #4CAF50; margin-bottom: 12px;";
+                
+                divItem.innerHTML = `
+                    <h4 style="margin: 0 0 5px 0; color: #ffeb3b;">${item.titolo || "Aggiornamento"}</h4>
+                    <p style="margin: 0; font-size: 0.9rem; color: #ccc; white-space: pre-line;">${item.descrizione || ""}</p>
+                `;
+                containerChangelog.appendChild(divItem);
+            });
+        }, (error) => {
+            console.error("DEBUG ERRORE FIREBASE CHANGELOG:", error);
+        });
+
+        // --- LISTENER IN TEMPO REALE (GESTIONE RIAVVIO/UPDATE) ---
+        onSnapshot(doc(db, "sistema", "stato"), (docSnapshot) => {
+            if (docSnapshot.exists()) {
+                const dati = docSnapshot.data();
+                
+                if (dati.statoSito === "manutenzione" || dati.statoSito === "riavvio") {
+                    const aggiornamentoCompletato = sessionStorage.getItem('aggiornamento_completato');
+                    if (!aggiornamentoCompletato) {
+                        mostraAvvisoRiavvio(dati.messaggio || "Il sito si riavvierà a breve!");
+                    }
+                } else {
+                    const banner = document.getElementById('avvisoRiavvioGlobale');
+                    if (banner) banner.remove();
+                    sessionStorage.removeItem('aggiornamento_completato');
+                }
+            }
+        });
+
+        function mostraAvvisoRiavvio(messaggio) {
+            let banner = document.getElementById('avvisoRiavvioGlobale');
+            if (!banner) {
+                banner = document.createElement('div');
+                banner.id = 'avvisoRiavvioGlobale';
+                banner.style.cssText = "position: fixed; top: 0; left: 0; width: 100%; background: #d32f2f; color: white; text-align: center; padding: 15px; font-weight: bold; z-index: 10000; box-shadow: 0 4px 10px rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center; gap: 20px;";
+                
+                const testoSpan = document.createElement('span');
+                testoSpan.id = 'testoAvvisoRiavvio';
+                banner.appendChild(testoSpan);
+
+                const btnFine = document.createElement('button');
+                btnFine.id = 'btnFineUpdate';
+                btnFine.innerText = "Fine Update / Mostra Changelog";
+                btnFine.style.cssText = "background: #fff; color: #d32f2f; border: none; padding: 6px 12px; border-radius: 4px; font-weight: bold; cursor: pointer;";
+                
+                btnFine.addEventListener('click', () => {
+                    sessionStorage.setItem('aggiornamento_completato', 'true');
+                    if (banner) banner.remove();
+
+                    const sezioneChangelog = document.getElementById('sezioneChangelog');
+                    if (sezioneChangelog) {
+                        sezioneChangelog.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        sezioneChangelog.classList.add('evidenziato');
+                        setTimeout(() => {
+                            sezioneChangelog.classList.remove('evidenziato');
+                        }, 1200);
+                    }
+                });
+
+                banner.appendChild(btnFine);
+                document.body.prepend(banner);
+            }
+            const testoSpan = document.getElementById('testoAvvisoRiavvio');
+            if (testoSpan) {
+                testoSpan.innerText = `⚠️ ATTENZIONE: ${messaggio}`;
+            }
+        }
+        // ------------------------------------------------------------------
+
         const themeSelect = document.getElementById('theme-select');
         const body = document.body;
 
@@ -478,7 +580,6 @@
             }
         });
 
-        // --- GESTIONE SEARCH BAR & SUGGERIMENTI ---
         const searchInput = document.getElementById('searchInput');
         const searchSuggestions = document.getElementById('searchSuggestions');
         const searchableCards = document.querySelectorAll('.searchable-card');
@@ -545,7 +646,6 @@
             }
         });
 
-        // --- GESTIONE SESSIONE (10 GIORNI) & MODALE ---
         const modalBenvenuto = document.getElementById('modal-Benvenuto');
         const boxFormAccesso = document.getElementById('boxFormAccesso');
         const boxSalutoNero = document.getElementById('boxSalutoNero');
@@ -589,10 +689,12 @@
         }
 
         function apriModale() {
-            boxFormAccesso.style.display = 'block';
-            boxSalutoNero.style.display = 'none';
-            modalBenvenuto.style.opacity = '1';
-            modalBenvenuto.style.display = 'flex';
+            if (boxFormAccesso) boxFormAccesso.style.display = 'block';
+            if (boxSalutoNero) boxSalutoNero.style.display = 'none';
+            if (modalBenvenuto) {
+                modalBenvenuto.style.opacity = '1';
+                modalBenvenuto.style.display = 'flex';
+            }
         }
 
         if (bisognaMostrareModale) {
@@ -614,13 +716,8 @@
                 if (banSnap.exists()) {
                     const infoBan = banSnap.data();
                     if (infoBan.tipo === "permanente") {
-                        document.body.innerHTML = `<div style="background:#121212; color:#ff5252; height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center; font-family:sans-serif;"><h1>SEI STATO BANNATO</h1><p>Non puoi accedere a questo archivio a causa di contenuti non idonei.</p></div>`;
+                        document.body.innerHTML = `<div style="background:#121212; color:#ff5252; height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center; font-family:sans-serif;"><h1>SEI STATO BANNATO</h1><p>Non puoi accedere a questo archivio.</p></div>`;
                         return;
-                    } else if (infoBan.tipo === "1giorno" && infoBan.scadenza) {
-                        if (new Date().getTime() < infoBan.scadenza) {
-                            document.body.innerHTML = `<div style="background:#121212; color:#ff9800; height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center; font-family:sans-serif;"><h1>SEI SOTTO TEMP-BAN</h1><p>Il tuo ban temporaneo scadrà presto.</p></div>`;
-                            return;
-                        }
                     }
                 }
 
@@ -654,7 +751,7 @@
                 const userSnap = await getDoc(userRef);
 
                 if (!userSnap.exists()) {
-                    errP.innerText = "Questo account non esiste. Registrati prima!";
+                    errP.innerText = "Questo account non esiste.";
                     return;
                 }
 
@@ -674,7 +771,7 @@
             const p = document.getElementById('inputPassword').value.trim();
 
             if (!u || !p) {
-                errP.innerText = "Inserisci username e password per registrarti!";
+                errP.innerText = "Inserisci username e password!";
                 return;
             }
 
@@ -684,7 +781,7 @@
                 const userSnap = await getDoc(userRef);
 
                 if (userSnap.exists()) {
-                    errP.innerText = "Username già esistente! Fai il login.";
+                    errP.innerText = "Username già esistente!";
                     return;
                 }
 
@@ -753,7 +850,7 @@
 
             if (testoVersione === "") {
                 stato.style.color = "#ff5252";
-                stato.innerText = "Per favore, inserisci una versione!";
+                stato.innerText = "Inserisci una versione!";
                 return;
             }
 
@@ -765,7 +862,7 @@
                 });
 
                 stato.style.color = "#4CAF50";
-                stato.innerText = "Grazie! Inviato con successo.";
+                stato.innerText = "Inviato con successo.";
                 document.getElementById('versionePreferita').value = "";
             } catch (e) {
                 stato.style.color = "#ff5252";

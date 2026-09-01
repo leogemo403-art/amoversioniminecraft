@@ -12,7 +12,7 @@
             margin: 0;
             padding: 20px;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
             min-height: 100vh;
         }
@@ -23,11 +23,17 @@
             box-shadow: 0 8px 24px rgba(0,0,0,0.5);
             width: 100%;
             max-width: 500px;
+            margin-bottom: 20px;
         }
         h2 {
             color: #2196F3;
             text-align: center;
             margin-bottom: 10px;
+        }
+        h3 {
+            color: #4CAF50;
+            font-size: 1.1rem;
+            margin-top: 0;
         }
         p.subtitle {
             text-align: center;
@@ -56,7 +62,7 @@
         }
         textarea {
             resize: vertical;
-            height: 120px;
+            height: 100px;
         }
         input:focus, textarea:focus, select:focus {
             border-color: #2196F3;
@@ -74,13 +80,17 @@
             cursor: pointer;
             transition: opacity 0.2s;
         }
+        .btn-cerca {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            margin-top: 10px;
+        }
         .btn:hover {
             opacity: 0.9;
         }
         .back-link {
             display: block;
             text-align: center;
-            margin-top: 20px;
+            margin-top: 10px;
             color: #aaa;
             text-decoration: none;
             font-size: 14px;
@@ -88,15 +98,29 @@
         .back-link:hover {
             color: #fff;
         }
+        .risultato-item {
+            background: #2a2a2a;
+            padding: 10px;
+            border-radius: 6px;
+            margin-top: 10px;
+            font-size: 0.9rem;
+            border-left: 4px solid #2196F3;
+        }
     </style>
 </head>
 <body>
 
+    <!-- BOX INVIO FEEDBACK -->
     <div class="container">
         <h2>Centro Segnalazioni</h2>
         <p class="subtitle">Hai trovato un bug o vuoi suggerire un'idea? Facci sapere!</p>
         
         <form id="feedbackForm">
+            <div class="form-group">
+                <label for="username">Nome Utente</label>
+                <input type="text" id="username" placeholder="Il tuo nickname..." required>
+            </div>
+
             <div class="form-group">
                 <label for="tipo">Tipo di Segnalazione</label>
                 <select id="tipo" required>
@@ -113,39 +137,107 @@
 
             <button type="submit" class="btn">Invia Segnalazione</button>
         </form>
-
         <a href="index.html" class="back-link">← Torna alla Home</a>
     </div>
 
-    <!-- Script Firebase per inviare i dati -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    <!-- BOX VERIFICA STATO FEEDBACK -->
+    <div class="container">
+        <h3>Controlla lo stato delle tue richieste</h3>
+        <p class="subtitle" style="margin-bottom: 15px;">Inserisci il tuo nome utente per vedere se è stato accettato, rifiutato o letto.</p>
+        
+        <div class="form-group" style="margin-bottom: 10px;">
+            <input type="text" id="cercaUsername" placeholder="Inserisci il tuo nickname...">
+        </div>
+        <button id="btnVerificaStato" class="btn btn-cerca">Verifica Stato</button>
+        
+        <div id="boxRisultati" style="margin-top: 15px;"></div>
+    </div>
 
-        // Inserisci qui la tua configurazione di Firebase se non è già centralizzata
+    <!-- Script Firebase -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+        import { getFirestore, collection, addDoc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
         const firebaseConfig = {
-            // I tuoi dati di configurazione Firebase
+            apiKey: "AIzaSyC2a2DiYisJg7-a70zd5Lv-f8C9-ZKZl00",
+            authDomain: "minecraft-preferenze-versioni.firebaseapp.com",
+            projectId: "minecraft-preferenze-versioni",
+            storageBucket: "minecraft-preferenze-versioni.firebasestorage.app",
+            messagingSenderId: "415706777166",
+            appId: "1:415706777166:web:8c4a2094c9b923d042e51f",
+            measurementId: "G-YCE8E74V6B"
         };
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
+        // 1. Invio del feedback con nome utente e stato iniziale "sospensione"
         document.getElementById('feedbackForm').addEventListener('submit', async (e) => {
             e.preventDefault();
+            const username = document.getElementById('username').value.trim();
             const tipo = document.getElementById('tipo').value;
-            const messaggio = document.getElementById('messaggio').value;
+            const messaggio = document.getElementById('messaggio').value.trim();
 
             try {
                 await addDoc(collection(db, "feedback"), {
+                    username: username,
                     tipo: tipo,
                     messaggio: messaggio,
-                    data: new Date().toISOString()
+                    stato: "sospensione", // Stato iniziale predefinito
+                    data: new Date().toLocaleString()
                 });
                 alert("Grazie! Il tuo feedback è stato inviato con successo.");
                 document.getElementById('feedbackForm').reset();
             } catch (error) {
                 console.error("Errore nell'invio:", error);
-                alert("Errore durante l'invio. Riprova più tardi.");
+                alert("Errore durante l'invio. Controlla la console.");
+            }
+        });
+
+        // 2. Controllo dello stato da parte dell'utente
+        document.getElementById('btnVerificaStato').addEventListener('click', async () => {
+            const cercaUser = document.getElementById('cercaUsername').value.trim();
+            const box = document.getElementById('boxRisultati');
+            box.innerHTML = "Ricerca in corso...";
+
+            if (!cercaUser) {
+                box.innerHTML = "<p style='color: #ff5252;'>Inserisci prima un nome utente.</p>";
+                return;
+            }
+
+            try {
+                const q = query(collection(db, "feedback"), where("username", "==", cercaUser));
+                const querySnapshot = await getDocs(q);
+
+                if (querySnapshot.empty) {
+                    box.innerHTML = "<p style='color: #aaa;'>Nessuna segnalazione trovata per questo utente.</p>";
+                    return;
+                }
+
+                let html = "";
+                querySnapshot.forEach((doc) => {
+                    const dati = doc.data();
+                    let badgeStato = "⏳ In sospensione";
+                    let coloreStato = "#ff9800";
+
+                    if (dati.stato === "accettato") { badgeStato = "✅ Accettato"; coloreStato = "#4CAF50"; }
+                    else if (dati.stato === "rifiutato") { badgeStato = "❌ Rifiutato"; coloreStato = "#f44336"; }
+                    else if (dati.stato === "letto") { badgeStato = "👁️ Letto"; coloreStato = "#2196F3"; }
+
+                    html += `
+                        <div class="risultato-item" style="border-left-color: ${coloreStato};">
+                            <p style="margin: 0 0 5px 0;"><strong>Tipo:</strong> ${dati.tipo.toUpperCase()}</p>
+                            <p style="margin: 0 0 5px 0;"><strong>Messaggio:</strong> ${dati.messaggio}</p>
+                            <p style="margin: 0 0 5px 0;"><strong>Stato:</strong> <span style="color: ${coloreStato}; font-weight: bold;">${badgeStato}</span></p>
+                            <small style="color: #888;">Inviato il: ${dati.data || "-"}</small>
+                        </div>
+                    `;
+                });
+                box.innerHTML = html;
+
+            } catch (error) {
+                console.error("Errore nella ricerca:", error);
+                box.innerHTML = "<p style='color: #ff5252;'>Errore durante il recupero dei dati.</p>";
             }
         });
     </script>
