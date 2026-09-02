@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pannello Admin - Archivio Minecraft</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #121212;
+            color: #ffffff;
+            padding: 30px 20px;
+            margin: 0;
+            text-align: center;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: rgba(30, 30, 30, 0.85);
+            padding: 30px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+            margin-bottom: 30px;
+            text-align: left;
+        }
+        .login-box {
+            max-width: 400px;
+            margin: 80px auto;
+            background: rgba(30, 30, 30, 0.9);
+            padding: 40px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+            text-align: center;
+        }
+        h2 { color: #ffeb3b; margin-bottom: 10px; text-align: center; }
+        h3 { color: #4CAF50; border-bottom: 1px solid #444; padding-bottom: 5px; margin-top: 30px; }
+        p { color: #cccccc; margin-bottom: 20px; }
+        table {
+            width: 100%;
+            text-align: left;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        th, td {
+            padding: 10px;
+            border-bottom: 1px solid #444;
+            font-size: 0.9rem;
+            vertical-align: middle;
+        }
+        th { color: #4CAF50; }
+        .btn {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            font-size: 14px;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        .btn-danger { background: #e53935; }
+        .btn-warning { background: #ff9800; }
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #555;
+            background: #222;
+            color: #fff;
+            margin: 5px 0 15px 0;
+            box-sizing: border-box;
+        }
+        textarea { resize: vertical; height: 80px; }
+        .hidden { display: none !important; }
+        .status-select {
+            padding: 6px 10px;
+            border-radius: 6px;
+            border: 1px solid #555;
+            background: #222;
+            color: #fff;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .status-select option {
+            background: #1e1e1e;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- LOGIN ADMIN -->
+    <div id="loginSection" class="login-box">
+        <h2>Accesso Admin Sicuro</h2>
+        <p>Inserisci le tue credenziali:</p>
+        <input type="email" id="inputEmail" placeholder="Email admin...">
+        <input type="password" id="inputPassword" placeholder="Password...">
+        <button id="btnAccedi" class="btn" style="width: 100%;">Accedi</button>
+        <p id="statoLogin" style="font-size: 0.85rem; margin-top: 10px; color: #ff5252;"></p>
+    </div>
+
+    <!-- PANNELLO DI CONTROLLO -->
+    <div id="adminPanel" class="container hidden">
+        <h2>Pannello di Controllo & Gestione Sito</h2>
+
+        <!-- SEZIONE GESTIONE MANUTENZIONE E CHANGELOG -->
+        <h3>📢 Gestione Riavvio e Changelog in Tempo Reale</h3>
+        <p>Avvisa gli utenti del riavvio imminente o pubblica le novità dell'ultimo update.</p>
+        <label for="inputChangelog">Testo Changelog dell'aggiornamento:</label>
+        <textarea id="inputChangelog" placeholder="Es. - Aggiunta nuova UI - Risolti bug critici..."></textarea>
+        <div style="display: flex; gap: 10px;">
+            <button id="btnAvviaManutenzione" class="btn btn-warning" style="flex: 1;">⚠️ Avvia Avviso Riavvio (1 Minuto)</button>
+            <button id="btnFineManutenzione" class="btn" style="flex: 1; background: #2196F3;">✅ Fine Update & Mostra Changelog</button>
+        </div>
+
+        <!-- SEZIONE GESTIONE BAN -->
+        <h3>🛠️ Gestione Ban Utenti</h3>
+        <p>Banna un utente indesiderato in modo permanente o temporaneo (24 ore).</p>
+        <input type="text" id="adminTargetUser" placeholder="Username da bannare...">
+        <select id="adminTipoBan">
+            <option value="permanente">Ban Permanente</option>
+            <option value="1giorno">Ban Temporaneo (24 Ore)</option>
+        </select>
+        <button id="btnEseguiBan" class="btn btn-danger" style="width: 100%;">Conferma Ban</button>
+        <p id="adminMessaggioStato" style="margin-top: 10px; font-size: 0.9rem;"></p>
+
+        <!-- SEZIONE FEEDBACK -->
+        <h3>Feedback, Bug e Proposte</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nome Utente</th>
+                    <th>Tipo / Messaggio</th>
+                    <th>Data</th>
+                    <th>Stato</th>
+                    <th>Azioni</th>
+                </tr>
+            </thead>
+            <tbody id="tabellaFeedbackBody"></tbody>
+        </table>
+
+        <!-- SEZIONE VIP -->
+        <h3>Gestione Stato VIP</h3>
+        <input type="text" id="inputUsernamePremium" placeholder="Nome utente..." style="width: 60%; display: inline-block;">
+        <button id="btnAttivaPremium" class="btn" style="display: inline-block; width: 35%;">Attiva VIP</button>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nome Utente</th>
+                    <th>Data Attivazione</th>
+                    <th>Azioni</th>
+                </tr>
+            </thead>
+            <tbody id="tabellaVipBody"></tbody>
+        </table>
+    </div>
+
+    <!-- SCRIPT FIREBASE ADMIN -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+        import { getFirestore, collection, getDocs, deleteDoc, doc, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyC2a2DiYisJg7-a70zd5Lv-f8C9-ZKZl00",
+            authDomain: "minecraft-preferenze-versioni.firebaseapp.com",
+            projectId: "minecraft-preferenze-versioni",
+            storageBucket: "minecraft-preferenze-versioni.firebasestorage.app",
+            messagingSenderId: "415706777166",
+            appId: "1:415706777166:web:8c4a2094c9b923d042e51f",
+            measurementId: "G-YCE8E74V6B"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        document.getElementById('btnAccedi').addEventListener('click', async () => {
+            const email = document.getElementById('inputEmail').value.trim();
+            const password = document.getElementById('inputPassword').value.trim();
+            try {
+                await signInWithEmailAndPassword(auth, email, password);
+                document.getElementById('loginSection').classList.add('hidden');
+                document.getElementById('adminPanel').classList.remove('hidden');
+                caricaFeedback();
+                caricaVip();
+            } catch (error) {
+                document.getElementById('statoLogin').innerText = "Credenziali non valide.";
+            }
+        });
+
+        // Gestione Manutenzione & Changelog
+        document.getElementById('btnAvviaManutenzione').addEventListener('click', async () => {
+            try {
+                await setDoc(doc(db, "sistema", "stato"), {
+                    statoSito: "manutenzione",
+                    messaggio: "⚠️ Riavvio del sito imminente tra 1 minuto per applicare modifiche!"
+                }, { merge: true });
+                alert("Avviso di riavvio inviato a tutti i client in tempo reale!");
+            } catch (err) { console.error(err); }
+        });
+
+        document.getElementById('btnFineManutenzione').addEventListener('click', async () => {
+            const changelogTesto = document.getElementById('inputChangelog').value.trim();
+            if (!changelogTesto) {
+                alert("Scrivi prima il changelog dell'aggiornamento!");
+                return;
+            }
+            try {
+                await setDoc(doc(db, "sistema", "stato"), {
+                    statoSito: "aggiornato",
+                    changelog: changelogTesto
+                }, { merge: true });
+                alert("Aggiornamento completato! Gli utenti vedranno il changelog.");
+            } catch (err) { console.error(err); }
+        });
+
+        // Gestione Ban Utenti
+        document.getElementById('btnEseguiBan').addEventListener('click', async () => {
+            const targetUser = document.getElementById('adminTargetUser').value.trim();
+            const tipoBan = document.getElementById('adminTipoBan').value;
+            const statoAdmin = document.getElementById('adminMessaggioStato');
+
+            if (!targetUser) {
+                statoAdmin.style.color = "#ff5252";
+                statoAdmin.innerText = "Inserisci un username valido!";
+                return;
+            }
+
+            const userKey = targetUser.toLowerCase();
+            try {
+                let datiBan = { tipo: tipoBan };
+                if (tipoBan === "1giorno") {
+                    datiBan.scadenza = new Date().getTime() + (24 * 60 * 60 * 1000);
+                }
+                await setDoc(doc(db, "banned", userKey), datiBan);
+                statoAdmin.style.color = "#4CAF50";
+                statoAdmin.innerText = `Utente '${targetUser}' bannato con successo (${tipoBan}).`;
+                document.getElementById('adminTargetUser').value = "";
+            } catch (e) {
+                statoAdmin.style.color = "#ff5252";
+                statoAdmin.innerText = "Errore durante l'esecuzione del ban.";
+            }
+        });
+
+        async function caricaFeedback() {
+            const tb = document.getElementById('tabellaFeedbackBody');
+            tb.innerHTML = "";
+            const querySnapshot = await getDocs(collection(db, "feedback"));
+            
+            querySnapshot.forEach((documento) => {
+                const dati = documento.data();
+                const docId = documento.id;
+                const statoCorrente = dati.stato || "sospensione";
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${dati.username || "Anonimo"}</td>
+                    <td><strong>[${(dati.tipo || "altro").toUpperCase()}]</strong> ${dati.messaggio}</td>
+                    <td>${dati.data || "-"}</td>
+                    <td>
+                        <select class="status-select" data-id="${docId}">
+                            <option value="sospensione" ${statoCorrente === 'sospensione' ? 'selected' : ''}>⏳ In sospensione</option>
+                            <option value="letto" ${statoCorrente === 'letto' ? 'selected' : ''}>👁️ Letto</option>
+                            <option value="accettato" ${statoCorrente === 'accettato' ? 'selected' : ''}>✅ Accettato</option>
+                            <option value="rifiutato" ${statoCorrente === 'rifiutato' ? 'selected' : ''}>❌ Rifiutato</option>
+                        </select>
+                    </td>
+                    <td><button class="btn btn-danger btn-elimina" data-id="${docId}" style="padding: 4px 8px; font-size: 12px;">Elimina</button></td>
+                `;
+                tb.appendChild(tr);
+            });
+
+            // Gestione cambio stato in tempo reale
+            document.querySelectorAll('.status-select').forEach(select => {
+                select.addEventListener('change', async (e) => {
+                    const idFeedback = e.target.getAttribute('data-id');
+                    const nuovoStato = e.target.value;
+                    try {
+                        const feedbackRef = doc(db, "feedback", idFeedback);
+                        await updateDoc(feedbackRef, { stato: nuovoStato });
+                    } catch (error) {
+                        console.error("Errore aggiornamento stato:", error);
+                        alert("Impossibile aggiornare lo stato.");
+                    }
+                });
+            });
+
+            // Gestione eliminazione
+            document.querySelectorAll('.btn-elimina').forEach(b => {
+                b.addEventListener('click', async (e) => {
+                    if (confirm("Vuoi davvero eliminare questo feedback?")) {
+                        await deleteDoc(doc(db, "feedback", e.target.getAttribute('data-id')));
+                        caricaFeedback();
+                    }
+                });
+            });
+        }
+
+        async function caricaVip() {
+            const tv = document.getElementById('tabellaVipBody');
+            tv.innerHTML = "";
+            const querySnapshot = await getDocs(collection(db, "premium"));
+            querySnapshot.forEach((documento) => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${documento.id}</td>
+                    <td>${documento.dataAttivazione || "-"}</td>
+                    <td><button class="btn btn-danger btn-rimuovi-vip" data-utente="${documento.id}" style="padding: 4px 8px; font-size: 12px;">Rimuovi</button></td>
+                `;
+                tv.appendChild(tr);
+            });
+            document.querySelectorAll('.btn-rimuovi-vip').forEach(b => {
+                b.addEventListener('click', async (e) => {
+                    await deleteDoc(doc(db, "premium", e.target.getAttribute('data-utente')));
+                    caricaVip();
+                });
+            });
+        }
+
+        document.getElementById('btnAttivaPremium').addEventListener('click', async () => {
+            const user = document.getElementById('inputUsernamePremium').value.trim().toLowerCase();
+            if (!user) return;
+            await setDoc(doc(db, "premium", user), { attivo: true, dataAttivazione: new Date().toLocaleString() });
+            document.getElementById('inputUsernamePremium').value = "";
+            caricaVip();
+        });
+    </script>
+</body>
+</html>
